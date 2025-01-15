@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="p-4">
+  <div class="px-16 py-8">
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

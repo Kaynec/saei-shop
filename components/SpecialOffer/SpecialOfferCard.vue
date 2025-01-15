@@ -1,8 +1,5 @@
 <template>
-  <Card
-    class="bg-white rounded-lg special-card after:bg-orange-400"
-    style="min-width: 12rem; max-width: 20rem; overflow: hidden"
-  >
+  <Card dir="rtl" class="bg-white rounded-lg special-card after:bg-orange-400">
     <template #content>
       <div class="flex justify-between items-center">
         <div
@@ -36,17 +33,17 @@
           </svg>
         </div>
       </div>
-      <NuxtImg :src="image" alt="product image" width="200" class="mx-auto" />
+      <NuxtImg :src="image" alt="product image" width="175" class="mx-auto" />
       <p class="text-gray-700 text-2xl">{{ name }}</p>
       <div class="mt-auto">
         <div class="flex justify-between text-2xl pt-4">
           <div class="flex gap-2 items-center text-gray-500">
             <span class="line-through">{{ off_price }} </span>
-            <IconsTooman />
+            <img src="~/assets/images/Tooman.svg" alt="" />
           </div>
           <div class="flex gap-2 items-center text-gray-900">
             <span>{{ price }}</span>
-            <IconsTooman />
+            <img src="~/assets/images/Tooman.svg" alt="" />
           </div>
         </div>
 
@@ -85,10 +82,10 @@
             <Icon name="mdi:basket-outline" class="text-2xl" />
             <span>افزودن به سبد</span>
           </MyButton>
-          <MyButton class="basis-1/5" color="bg-gray-100">
+          <MyButton class="basis-1/5" color="bg-gray-200">
             <Icon name="mdi:heart-outline" class="text-gray-600 text-xl" />
           </MyButton>
-          <MyButton class="basis-1/5" color="bg-gray-100">
+          <MyButton class="basis-1/5" color="bg-gray-200">
             <Icon name="mdi:basket-outline" class="text-gray-600 text-xl" />
           </MyButton>
         </div>
@@ -162,7 +159,7 @@ onMounted(() => {
 
 <style scoped>
 :deep(.p-card-body) {
-  padding: 0.75rem;
+  padding: 0;
   height: 100%;
 }
 

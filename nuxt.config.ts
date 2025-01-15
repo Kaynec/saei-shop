@@ -1,4 +1,4 @@
-import Material from "@primevue/themes/Material";
+import Aura from "@primevue/themes/Aura";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   tailwindcss: {
@@ -10,7 +10,6 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "@nuxt/icon",
     "@nuxt/image",
-    "vue3-carousel-nuxt",
   ],
 
   icon: {
@@ -22,7 +21,7 @@ export default defineNuxtConfig({
   primevue: {
     options: {
       theme: {
-        preset: Material,
+        preset: Aura,
         options: {
           cssLayer: {
             name: "primevue",
