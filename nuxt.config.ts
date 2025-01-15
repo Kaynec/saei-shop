@@ -4,7 +4,21 @@ export default defineNuxtConfig({
   tailwindcss: {
     cssPath: "~/styles/index.css",
   },
-  modules: ["@primevue/nuxt-module", "@nuxtjs/tailwindcss"],
+
+  modules: [
+    "@primevue/nuxt-module",
+    "@nuxtjs/tailwindcss",
+    "@nuxt/icon",
+    "@nuxt/image",
+    "vue3-carousel-nuxt",
+  ],
+
+  icon: {
+    serverBundle: {
+      collections: ["uil", "mdi"], // <!--- this
+    },
+  },
+
   primevue: {
     options: {
       theme: {
@@ -18,5 +32,7 @@ export default defineNuxtConfig({
       },
     },
   },
+
   devtools: { enabled: true },
+  compatibilityDate: "2025-01-15",
 });

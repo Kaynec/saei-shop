@@ -10,13 +10,16 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/icon": "^1.10.3",
+    "@nuxt/image": "^1.9.0",
     "@nuxtjs/tailwindcss": "^6.12.2",
     "@primevue/themes": "^4.2.5",
     "nuxt": "^3.15.1",
     "primevue": "^4.2.5",
     "tailwindcss-primeui": "^0.4.0",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "vue3-carousel-nuxt": "^1.1.4"
   },
   "devDependencies": {
     "@primevue/nuxt-module": "^4.2.5"

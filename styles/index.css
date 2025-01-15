@@ -8,3 +8,29 @@
   @tailwind components;
   @tailwind utilities;
 }
+
+@font-face {
+  font-family: YekanBakh;
+  src: url("../assets/webfonts/Vazirmatn-FD-Light.woff2");
+  font-weight: 400;
+}
+@font-face {
+  font-family: YekanBakh;
+  src: url("../assets/webfonts/Vazirmatn-FD-Regular.woff2");
+  font-weight: 500;
+}
+@font-face {
+  font-family: YekanBakh;
+  src: url("../assets/webfonts/Vazirmatn-FD-SemiBold.woff2");
+  font-weight: 600;
+}
+@font-face {
+  font-family: YekanBakh;
+  src: url("../assets/webfonts/Vazirmatn-FD-Bold.woff2");
+  font-weight: 800;
+}
+body {
+  font-family: YekanBakh, "Sans-Serif";
+  direction: rtl;
+  line-height: -2px !important;
+}
