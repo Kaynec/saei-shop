@@ -180,5 +180,7 @@ onMounted(() => {
   inset: 0;
   bottom: 0; /* Adjust as needed */
   top: 98.5%; /* Not needed here */
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 </style>

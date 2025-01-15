@@ -20,7 +20,7 @@ const props = defineProps<MyButtonProps>();
 const buttonClasses = computed(() => {
   const defaultColor = props.color || "bg-blue-500";
 
-  return `${defaultColor} rounded-lg px-2 py-3  items-center flex justify-center transition-colors duration-400 hover:bg-opacity-70`;
+  return `${defaultColor} rounded-lg text-sm py-3  items-center flex justify-center transition-colors duration-400 hover:bg-opacity-70`;
 });
 </script>
 
