@@ -1,9 +1,11 @@
 <template>
-  <Card dir="rtl" class="bg-white rounded-lg special-card after:bg-orange-400">
+  <Card
+    class="bg-white select-none rounded-lg special-card after:bg-orange-400"
+  >
     <template #content>
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center translate-y-2">
         <div
-          class="w-14 h-14 bg-orange-300 grid place-content-center text-lg font-bold"
+          class="w-12 h-12 bg-orange-300 grid place-content-center font-[600]"
           style="
             -webkit-mask-image: url('star.svg');
             mask-image: url('star.svg');
@@ -15,10 +17,10 @@
           {{ score }}%
         </div>
         <div class="flex items-center gap-1 text-orange-300">
-          <span class="text-2xl">{{ score }}</span>
+          <span class="text-xl">{{ score }}</span>
           <svg
-            width="36"
-            height="36"
+            width="30"
+            height="30"
             viewBox="0 0 16 16"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -33,10 +35,10 @@
           </svg>
         </div>
       </div>
-      <NuxtImg :src="image" alt="product image" width="175" class="mx-auto" />
-      <p class="text-gray-700 text-2xl">{{ name }}</p>
+      <NuxtImg :src="image" alt="product image" width="140" class="mx-auto" />
+      <p class="text-gray-700 text-xl">{{ name }}</p>
       <div class="mt-auto">
-        <div class="flex justify-between text-2xl pt-4">
+        <div class="flex justify-between text-xl pt-2">
           <div class="flex gap-2 items-center text-gray-500">
             <span class="line-through">{{ off_price }} </span>
             <img src="~/assets/images/Tooman.svg" alt="" />
@@ -52,41 +54,41 @@
           class="flex mt-1 p-1 text-gray-400 rounded-lg bg-gray-100 justify-evenly"
         >
           <div
-            class="border-l-2 border-solid flex items-center text-2xl flex-col flex-1 border-gray-300"
+            class="border-l-2 border-solid flex items-center text-xl flex-col flex-1 border-gray-300"
           >
             <span class="text-orange-300">{{ countdown.seconds }}</span>
             <span class="text-sm"> ثانیه</span>
           </div>
           <div
-            class="border-l-2 border-solid flex items-center text-2xl flex-col flex-1 border-gray-300"
+            class="border-l-2 border-solid flex items-center text-xl flex-col flex-1 border-gray-300"
           >
             <span class="text-orange-300">{{ countdown.minutes }}</span>
             <span class="text-sm"> دقیقه</span>
           </div>
           <div
-            class="border-l-2 border-solid flex items-center text-2xl flex-col flex-1 border-gray-300"
+            class="border-l-2 border-solid flex items-center text-xl flex-col flex-1 border-gray-300"
           >
             <span class="text-orange-300">{{ countdown.hours }}</span>
             <span class="text-sm"> ساعت</span>
           </div>
 
-          <div class="flex items-center text-2xl flex-col flex-1">
+          <div class="flex items-center text-xl flex-col flex-1">
             <span class="text-orange-300">{{ countdown.days }}</span>
             <span class="text-sm"> روز</span>
           </div>
         </div>
 
         <!-- Button Section -->
-        <div class="flex py-4 gap-1 mt-1">
+        <div class="flex pb-3 pt-1 gap-1 mt-1">
           <MyButton color="bg-orange-400" class="basis-3/5 gap-2" unstyled>
-            <Icon name="mdi:basket-outline" class="text-2xl" />
+            <Icon name="mdi:basket-outline" class="text-xl" />
             <span>افزودن به سبد</span>
           </MyButton>
           <MyButton class="basis-1/5" color="bg-gray-200">
-            <Icon name="mdi:heart-outline" class="text-gray-600 text-xl" />
+            <Icon name="mdi:heart-outline" class="text-gray-600 text-lg" />
           </MyButton>
           <MyButton class="basis-1/5" color="bg-gray-200">
-            <Icon name="mdi:basket-outline" class="text-gray-600 text-xl" />
+            <Icon name="mdi:basket-outline" class="text-gray-600 text-lg" />
           </MyButton>
         </div>
       </div>
@@ -159,15 +161,11 @@ onMounted(() => {
 
 <style scoped>
 :deep(.p-card-body) {
-  padding: 0;
-  height: 100%;
+  padding: 0; /* Adjusted padding */
 }
 
 :deep(.p-card-content) {
-  padding: 0.75rem;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  padding: 0.25rem; /* Adjusted padding */
 }
 
 .special-card {
@@ -177,9 +175,9 @@ onMounted(() => {
 .special-card::after {
   content: ""; /* Set content to an empty string */
   position: absolute; /* Use absolute positioning */
-  inset: 0;
-  bottom: 0; /* Adjust as needed */
-  top: 98.5%; /* Not needed here */
+  inset: 0; /* Adjusted inset for scaling */
+
+  top: 98.5%;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
 }
