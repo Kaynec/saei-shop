@@ -37,8 +37,23 @@ const tailwindColors = {
   },
 };
 
+const colors = ["red", "grey", "orange"];
+
+const safeColours = colors.flatMap((color) => {
+  const list = [];
+
+  for (let color of colors) {
+    list.push(...getPossibleStates(color, 50));
+  }
+
+  for (let i = 1; i < 900; i++) {
+    list.push(...getPossibleStates(color, i * 100));
+  }
+  return list;
+});
 // tailwind.config.js
 module.exports = {
+  safelist: [...safeColours],
   theme: {
     extend: {
       colors: tailwindColors,
@@ -46,3 +61,106 @@ module.exports = {
   },
   plugins: [require("tailwindcss-primeui")],
 };
+
+function getPossibleStates(color: string, variant: number) {
+  return [
+    // Base state
+    `bg-${color}-${variant}`,
+    `text-${color}-${variant}`,
+    `border-${color}-${variant}`,
+
+    // Hover states
+    `hover:bg-${color}-${variant}`,
+    `hover:text-${color}-${variant}`,
+    `hover:border-${color}-${variant}`,
+
+    // Focus states
+    `focus:bg-${color}-${variant}`,
+    `focus:text-${color}-${variant}`,
+    `focus:border-${color}-${variant}`,
+
+    // Active states
+    `active:bg-${color}-${variant}`,
+    `active:text-${color}-${variant}`,
+    `active:border-${color}-${variant}`,
+
+    // Disabled states
+    `disabled:bg-${color}-${variant}`,
+    `disabled:text-${color}-${variant}`,
+    `disabled:border-${color}-${variant}`,
+
+    // Group states
+    `group-hover:bg-${color}-${variant}`,
+    `group-hover:text-${color}-${variant}`,
+    `group-hover:border-${color}-${variant}`,
+    `group-focus:bg-${color}-${variant}`,
+    `group-focus:text-${color}-${variant}`,
+    `group-focus:border-${color}-${variant}`,
+
+    // Responsive states
+    `sm:bg-${color}-${variant}`,
+    `sm:text-${color}-${variant}`,
+    `sm:border-${color}-${variant}`,
+    `sm:hover:bg-${color}-${variant}`,
+    `sm:hover:text-${color}-${variant}`,
+    `sm:hover:border-${color}-${variant}`,
+    `sm:focus:bg-${color}-${variant}`,
+    `sm:focus:text-${color}-${variant}`,
+    `sm:focus:border-${color}-${variant}`,
+    `sm:active:bg-${color}-${variant}`,
+    `sm:active:text-${color}-${variant}`,
+    `sm:active:border-${color}-${variant}`,
+
+    `md:bg-${color}-${variant}`,
+    `md:text-${color}-${variant}`,
+    `md:border-${color}-${variant}`,
+    `md:hover:bg-${color}-${variant}`,
+    `md:hover:text-${color}-${variant}`,
+    `md:hover:border-${color}-${variant}`,
+    `md:focus:bg-${color}-${variant}`,
+    `md:focus:text-${color}-${variant}`,
+    `md:focus:border-${color}-${variant}`,
+    `md:active:bg-${color}-${variant}`,
+    `md:active:text-${color}-${variant}`,
+    `md:active:border-${color}-${variant}`,
+
+    `lg:bg-${color}-${variant}`,
+    `lg:text-${color}-${variant}`,
+    `lg:border-${color}-${variant}`,
+    `lg:hover:bg-${color}-${variant}`,
+    `lg:hover:text-${color}-${variant}`,
+    `lg:hover:border-${color}-${variant}`,
+    `lg:focus:bg-${color}-${variant}`,
+    `lg:focus:text-${color}-${variant}`,
+    `lg:focus:border-${color}-${variant}`,
+    `lg:active:bg-${color}-${variant}`,
+    `lg:active:text-${color}-${variant}`,
+    `lg:active:border-${color}-${variant}`,
+
+    `xl:bg-${color}-${variant}`,
+    `xl:text-${color}-${variant}`,
+    `xl:border-${color}-${variant}`,
+    `xl:hover:bg-${color}-${variant}`,
+    `xl:hover:text-${color}-${variant}`,
+    `xl:hover:border-${color}-${variant}`,
+    `xl:focus:bg-${color}-${variant}`,
+    `xl:focus:text-${color}-${variant}`,
+    `xl:focus:border-${color}-${variant}`,
+    `xl:active:bg-${color}-${variant}`,
+    `xl:active:text-${color}-${variant}`,
+    `xl:active:border-${color}-${variant}`,
+
+    `2xl:bg-${color}-${variant}`,
+    `2xl:text-${color}-${variant}`,
+    `2xl:border-${color}-${variant}`,
+    `2xl:hover:bg-${color}-${variant}`,
+    `2xl:hover:text-${color}-${variant}`,
+    `2xl:hover:border-${color}-${variant}`,
+    `2xl:focus:bg-${color}-${variant}`,
+    `2xl:focus:text-${color}-${variant}`,
+    `2xl:focus:border-${color}-${variant}`,
+    `2xl:active:bg-${color}-${variant}`,
+    `2xl:active:text-${color}-${variant}`,
+    `2xl:active:border-${color}-${variant}`,
+  ];
+}

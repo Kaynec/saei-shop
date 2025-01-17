@@ -1,62 +1,58 @@
 <template>
-  <main class="flex flex-col sm:flex-row bg-orange-100 rounded-lg px-2 !py-2">
-    <div class="w-full mx-auto pt-22">
-      <div class="max-w-[calc(100%)] mx-auto">
-        <Carousel
-          :opts="{
-            align: 'start',
-          }"
-        >
-          <CarouselContent>
-            <CarouselItem
-              class="basis-2/5 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 2xl:basis-1/6"
-            >
-              <div class="flex flex-col items-center h-full justify-center">
-                <img
-                  src="../public/discount-pic.svg"
-                  width="200"
-                  class="py-2 mt-auto"
-                />
-                <MyButton
-                  color="bg-orange-400"
-                  class="w-full mt-auto gap-2"
-                  unstyled
-                >
-                  <span>افزودن به سبد</span>
-                  <span
-                    class="bg-gray-50 bg-opacity-30 items-center flex justify-center w-6 h-6 rounded-lg"
-                  >
-                    <Icon name="mdi:arrow-top-left-thin" class="text-xl" />
-                  </span>
-                </MyButton>
-              </div>
-            </CarouselItem>
-            <CarouselItem
-              v-for="(_, index) in 50"
-              :key="index"
-              class="basis-3/5 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 2xl:basis-1/6"
-            >
-              <SpecialOfferCard
-                image="https://s3-alpha-sig.figma.com/img/dbb6/728f/22a4a332ae99a982afb0156d548c3492?Expires=1737936000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=UsBqGIsKw15RoEMKEH9yaqXwzMdq6SWXf~yirvuYyEFJmdvr6dlj-fG5rYdbEl0FETwWGNBNsJvNe~yV9dx~O-TCgCeSOI5ahk1viYD2Lb-d1ABZ1QhfeV2c9PkTNb9l1tHnZ12WWhKp9a5i~qRczDvWtoSWIx4Q28momgh0P6Be4SGF9q3Ntn9wnUC9Uw49VbPyFW0b-AYm-QkNiWHR~fDtiRCetqt-BJXbDGOMT1BDIOw-xS4X4W543XdNNn5E4USorX8x1LgCadUp5Z4vIY4iVep3uYGdmLVG5pdU1DtmPb6BgHaxR1nXcY7~RZJnWmbyC4kFBuhfgnFbOcjybA__"
-                :score="70"
-                name="کتاب راز"
-                discount_end_time="2025-01-25T15:30:00Z"
-                price="120,000"
-                off_price="150,000"
-              />
-            </CarouselItem>
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
-      </div>
-    </div>
+  <main class="space-y-8">
+    <ImageSlider />
+
+    <!-- <ProductList v-bind="orangeCarouselData" variant="primary">
+      <MyCarouselItem
+        v-for="index in 50"
+        :key="index"
+        :class="[
+          ` basis-3/5 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 2xl:basis-1/6`,
+        ]"
+      >
+        <ProductItem
+          image="https://s8.uupload.ir/files/22a4a332ae99a982afb0156d548c3492_(1)_gzn6.png"
+          :score="70"
+          name="کتاب راز"
+          discount_end_time="2025-01-25T15:30:00Z"
+          price="120,000"
+          off_price="150,000"
+          theme-color="red"
+        />
+      </MyCarouselItem>
+    </ProductList>
+
+    <ProductList v-bind="redCarouselData" variant="bordered" /> -->
   </main>
 </template>
 
 <script setup lang="ts">
-import emblaCarouselVue from "embla-carousel-vue";
-import Carousel from "~/components/Carousel/Carousel.vue";
-import CarouselContent from "~/components/Carousel/CarouselContent.vue";
-const [emblaRef] = emblaCarouselVue();
+const redCarouselData = {
+  headerImage:
+    "https://s8.uupload.ir/files/kisspng-old-magic-book-children-s-literature-magic-book-5b0dc6aa555dc0_1_to0p.png",
+  headerText: "کتاب و لوازم التحریر",
+  themeColor: "red" as const,
+  opts: {
+    align: "start",
+  },
+  showNuxtImg: false,
+  nuxtImgUrl: "https://s8.uupload.ir/files/-children-_lc15.png",
+};
+
+const orangeCarouselData = {
+  headerImage:
+    "https://s8.uupload.ir/files/kisspng-colored-pencil-vector-pencil-and-pen-5aa8d4cbd6c650_1_nb3p.png",
+  headerText: "لوازم التحریر و ابزار",
+  themeColor: "orange" as const,
+  opts: {
+    align: "start",
+  },
+  showNuxtImg: true,
+  nuxtImgUrl: "https://s8.uupload.ir/files/-children-_lc15.png",
+};
+
+// import emblaCarouselVue from "embla-carousel-vue";
+// import Carousel from "~/components/Carousel/Carousel.vue";
+// import MyCarouselContent from "~/components/Carousel/MyCarouselContent.vue";
+// const [emblaRef] = emblaCarouselVue();
 </script>

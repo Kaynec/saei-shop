@@ -52,6 +52,7 @@ const [useProvideCarousel, useInjectCarousel] = createInjectionState(
       scrollPrev,
       scrollNext,
       orientation,
+      onSelect,
     };
   }
 );

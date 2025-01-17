@@ -5,6 +5,14 @@ export default defineNuxtConfig({
     cssPath: "~/styles/index.css",
   },
 
+  imports: {},
+
+  components: [
+    {
+      path: "~/components", // will get any components nested in let's say /components/test too
+      pathPrefix: false,
+    },
+  ],
   modules: [
     "@primevue/nuxt-module",
     "@nuxtjs/tailwindcss",
