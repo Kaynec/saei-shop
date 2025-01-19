@@ -1,8 +1,7 @@
 <script setup lang="ts">
 const carouselItems = Array.from(
   { length: 10 },
-  (_, i) =>
-    "https://s8.uupload.ir/filelink/eRwwLR8wNDUD_d4dbcb560c/slider_bm85.webp"
+  (_, i) => "https://s8.uupload.ir/files/slider_bm85_(1)_hw99.png"
 ); // Dummy data for the carousel
 </script>
 

@@ -46,7 +46,7 @@ const safeColours = colors.flatMap((color) => {
     list.push(...getPossibleStates(color, 50));
   }
 
-  for (let i = 1; i < 900; i++) {
+  for (let i = 1; i < 9; i++) {
     list.push(...getPossibleStates(color, i * 100));
   }
   return list;
@@ -54,12 +54,13 @@ const safeColours = colors.flatMap((color) => {
 // tailwind.config.js
 module.exports = {
   safelist: [...safeColours],
+
   theme: {
     extend: {
       colors: tailwindColors,
     },
   },
-  plugins: [require("tailwindcss-primeui")],
+  plugins: [require("tailwindcss-primeui"), require("@tailwindcss/typography")],
 };
 
 function getPossibleStates(color: string, variant: number) {

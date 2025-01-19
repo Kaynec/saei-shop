@@ -7,6 +7,33 @@
 @layer tailwind-utilities {
   @tailwind components;
   @tailwind utilities;
+
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+  .scrollbar {
+    padding: 1rem;
+  }
+  .scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 20px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: #f7f4ed;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 100vh;
+    height: 50px;
+    /* border: 0px solid #f6f7ed; */
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #c0a0b9;
+  }
 }
 
 @font-face {

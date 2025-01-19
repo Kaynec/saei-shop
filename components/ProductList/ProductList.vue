@@ -1,9 +1,13 @@
-<script setup lang="ts">
+<script setup lang="tsx">
+import MyCarouselNext from "../CustomCarousel/MyCarouselNext.vue";
+import MyCarouselPrevious from "../CustomCarousel/MyCarouselPrevious.vue";
+import ViewAllBtn from "../Product/ViewAllBtn.vue";
+
 interface CarouselOptions {
   align: string;
 }
 
-const { variant = "primary" } = defineProps<{
+const { variant = "primary", themeColor } = defineProps<{
   headerImage: string; // URL for the header image
   headerText: string; // Text displayed in the header
   themeColor: "red" | "orange"; // Theme color options
@@ -14,6 +18,16 @@ const { variant = "primary" } = defineProps<{
 }>();
 
 const carouselItems = Array.from({ length: 50 }, (_, i) => i); // Dummy data for the carousel
+
+const MyComponent = () => {
+  return (
+    <div class="items-center gap-2 justify-center flex mt-4 md:hidden">
+      <ViewAllBtn class={["w-max !px-6", `bg-${themeColor}-400`]} />
+      <MyCarouselNext themeColor={themeColor} />
+      <MyCarouselPrevious themeColor={themeColor} />
+    </div>
+  );
+};
 </script>
 
 <template>
@@ -44,18 +58,12 @@ const carouselItems = Array.from({ length: 50 }, (_, i) => i); // Dummy data for
               <NuxtImg
                 v-if="showNuxtImg && nuxtImgUrl"
                 :src="nuxtImgUrl"
+                class="hidden md:flex"
                 alt="dynamic product category picture"
                 width="350"
               />
 
-              <!-- Action Buttons -->
-              <div class="flex items-center gap-2">
-                <ViewAllBtn
-                  :class="`w-max !px-6 !bg-${themeColor}-100 !text-${themeColor}-500`"
-                />
-                <MyCarouselNext :theme-color="themeColor" />
-                <MyCarouselPrevious :theme-color="themeColor" />
-              </div>
+              <MyComponent class="items-center gap-2 hidden md:flex" />
             </div>
 
             <!-- Carousel Content -->
@@ -70,7 +78,7 @@ const carouselItems = Array.from({ length: 50 }, (_, i) => i); // Dummy data for
                   v-for="index in carouselItems"
                   :key="index"
                   :class="[
-                    ` basis-3/5 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 2xl:basis-1/6`,
+                    ` basis-4/5 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 2xl:basis-1/6`,
                     variant == 'bordered' ? '!pl-2 ' : '',
                   ]"
                 >
@@ -81,11 +89,14 @@ const carouselItems = Array.from({ length: 50 }, (_, i) => i); // Dummy data for
                     discount_end_time="2025-01-25T15:30:00Z"
                     price="120,000"
                     off_price="150,000"
-                    theme-color="red"
+                    :themeColor="themeColor"
                   />
                 </MyCarouselItem>
               </slot>
             </MyCarouselContent>
+            <MyComponent
+              class="items-center gap-2 justify-center flex mt-4 md:hidden"
+            />
           </MyCarousel>
         </div>
       </div>

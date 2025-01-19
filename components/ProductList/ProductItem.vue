@@ -36,7 +36,7 @@
         <!-- Button Section -->
         <div class="flex pb-3 pt-1 gap-1 mt-1">
           <MyButton
-            :color="`bg-${ButtonColor}-400`"
+            :color="`bg-${themeColor}-400`"
             class="basis-3/5 gap-2"
             unstyled
           >
@@ -56,14 +56,14 @@
 </template>
 
 <script setup lang="ts">
-const { ButtonColor = "red", ...props } = defineProps<{
+const { themeColor = "red", ...props } = defineProps<{
   image: string;
   score: number;
   name: string; // Assuming name is a string (e.g., book title)
   discount_end_time?: string; // Optional prop for discount end time
   price: string;
   off_price: string;
-  ButtonColor?: string;
+  themeColor?: string;
 }>();
 </script>
 

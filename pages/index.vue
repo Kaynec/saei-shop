@@ -1,6 +1,11 @@
 <template>
-  <main class="space-y-8">
-    <ImageSlider />
+  <main class="space-y-8 p-2 lg:p-4">
+    <SpecialOffer />
+
+    <ProductList v-bind="redCarouselData" variant="bordered" />
+
+    <LatestBlog />
+    <!-- <ImageSlider /> -->
 
     <!-- <ProductList v-bind="orangeCarouselData" variant="primary">
       <MyCarouselItem

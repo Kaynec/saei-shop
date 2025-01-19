@@ -1,4 +1,5 @@
 import Aura from "@primevue/themes/Aura";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   tailwindcss: {
@@ -11,18 +12,22 @@ export default defineNuxtConfig({
     {
       path: "~/components", // will get any components nested in let's say /components/test too
       pathPrefix: false,
+      // global: true,
     },
   ],
+
   modules: [
     "@primevue/nuxt-module",
     "@nuxtjs/tailwindcss",
     "@nuxt/icon",
     "@nuxt/image",
+    "@nuxtjs/mdc",
+    "@nuxtjs/seo",
   ],
 
   icon: {
     serverBundle: {
-      collections: ["uil", "mdi"], // <!--- this
+      collections: ["mdi"], // <!--- this
     },
   },
 
@@ -41,5 +46,5 @@ export default defineNuxtConfig({
   },
 
   devtools: { enabled: true },
-  compatibilityDate: "2025-01-15",
+  compatibilityDate: "2025-01-19",
 });
