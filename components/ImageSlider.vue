@@ -14,6 +14,7 @@ const carouselItems = Array.from(
             :opts="{
               align: 'start',
             }"
+            :autoplay="true"
           >
             <!-- Carousel Content -->
             <MyCarouselContent class="-ml-0">

@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-const { themeColor = "red", ...props } = defineProps<{
+const { themeColor, ...props } = defineProps<{
   image: string;
   score: number;
   name: string; // Assuming name is a string (e.g., book title)

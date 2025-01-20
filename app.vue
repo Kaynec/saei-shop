@@ -6,9 +6,11 @@
   <!-- Class For Container Paddings On Y Axis -->
   <!-- py-3 sm:py-4 md:py-6 xl:py-10-->
   <!--  -->
-  <div class="max-w-full text-gray-900">
-    <NuxtLayout>
+  <NuxtLayout>
+    <div class="flex min-h-[100svh] flex-col max-w-full text-gray-900">
+      <Header />
       <NuxtPage />
-    </NuxtLayout>
-  </div>
+      <Footer />
+    </div>
+  </NuxtLayout>
 </template>

@@ -1,4 +1,4 @@
-const tailwindColors = {
+export const tailwindColors = {
   red: {
     50: "rgb(244 234 239 / <alpha-value>)",
     100: "rgb(220 189 206 / <alpha-value>)",
@@ -56,12 +56,17 @@ module.exports = {
   safelist: [...safeColours],
 
   theme: {
-    gridTemplateColumns: {
-      "auto-fill-100": "repeat(auto-fill, minmax(200px, 1fr))",
-      "auto-fit-100": "repeat(auto-fit, minmax(200px, 1fr))",
-    },
     extend: {
-      colors: tailwindColors,
+      gridTemplateColumns: {
+        "auto-fill-100": "repeat(auto-fill, minmax(200px, 1fr))",
+        "auto-fit-200": "repeat(auto-fit, minmax(200px, 1fr))",
+        "auto-fit-300": "repeat(auto-fit, minmax(300px, 1fr))",
+        "auto-fit-350": "repeat(auto-fit, minmax(350px, 1fr))",
+      },
+      colors: {
+        ...tailwindColors,
+        bgColor: "rgb(235,235,235)",
+      },
     },
   },
   plugins: [require("tailwindcss-primeui"), require("@tailwindcss/typography")],

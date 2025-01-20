@@ -5,7 +5,7 @@
     <template #content>
       <div class="flex justify-between items-center translate-y-2">
         <div
-          class="w-12 h-12 bg-orange-300 grid place-content-center font-[600]"
+          class="w-12 h-12 bg-orange-300 grid place-content-center font-semibold text-white"
           style="
             -webkit-mask-image: url('star.svg');
             mask-image: url('star.svg');

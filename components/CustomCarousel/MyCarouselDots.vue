@@ -1,5 +1,5 @@
 <template>
-  <div class="relative padding-4 ms-24 flex gap-2 items-center">
+  <div class="relative ms-24 -translate-y-12 flex gap-2 items-center">
     <Button
       unstyled
       :class="[

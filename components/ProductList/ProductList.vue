@@ -11,7 +11,6 @@ const { variant = "primary", themeColor } = defineProps<{
   headerImage: string; // URL for the header image
   headerText: string; // Text displayed in the header
   themeColor: "red" | "orange"; // Theme color options
-  opts: CarouselOptions; // Carousel options object
   showNuxtImg?: boolean; // Optional flag to show the NuxtImg component
   nuxtImgUrl?: string; // Optional URL for the NuxtImg component
   variant?: "primary" | "bordered";
@@ -21,7 +20,7 @@ const carouselItems = Array.from({ length: 50 }, (_, i) => i); // Dummy data for
 
 const MyComponent = () => {
   return (
-    <div class="items-center gap-2 justify-center flex mt-4 md:hidden">
+    <div class="items-center gap-2 justify-center flex mt-4 ">
       <ViewAllBtn class={["w-max !px-6", `bg-${themeColor}-400`]} />
       <MyCarouselNext themeColor={themeColor} />
       <MyCarouselPrevious themeColor={themeColor} />
@@ -31,7 +30,7 @@ const MyComponent = () => {
 </script>
 
 <template>
-  <main>
+  <main class="py-8">
     <section class="flex flex-col sm:flex-row">
       <div class="w-full mx-auto">
         <div class="max-w-[calc(100%)] mx-auto">
@@ -78,12 +77,12 @@ const MyComponent = () => {
                   v-for="index in carouselItems"
                   :key="index"
                   :class="[
-                    ` basis-4/5 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 2xl:basis-1/6`,
+                    ` basis-4/5 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 2xl:basis-1/6`,
                     variant == 'bordered' ? '!pl-2 ' : '',
                   ]"
                 >
                   <ProductItem
-                    image="https://s8.uupload.ir/files/22a4a332ae99a982afb0156d548c3492_(1)_gzn6.png"
+                    image="https://s3-alpha-sig.figma.com/img/dbb6/728f/22a4a332ae99a982afb0156d548c3492?Expires=1737936000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=UsBqGIsKw15RoEMKEH9yaqXwzMdq6SWXf~yirvuYyEFJmdvr6dlj-fG5rYdbEl0FETwWGNBNsJvNe~yV9dx~O-TCgCeSOI5ahk1viYD2Lb-d1ABZ1QhfeV2c9PkTNb9l1tHnZ12WWhKp9a5i~qRczDvWtoSWIx4Q28momgh0P6Be4SGF9q3Ntn9wnUC9Uw49VbPyFW0b-AYm-QkNiWHR~fDtiRCetqt-BJXbDGOMT1BDIOw-xS4X4W543XdNNn5E4USorX8x1LgCadUp5Z4vIY4iVep3uYGdmLVG5pdU1DtmPb6BgHaxR1nXcY7~RZJnWmbyC4kFBuhfgnFbOcjybA__"
                     :score="70"
                     name="کتاب راز"
                     discount_end_time="2025-01-25T15:30:00Z"

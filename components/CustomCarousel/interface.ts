@@ -13,6 +13,7 @@ export interface CarouselProps {
   opts?: CarouselOptions;
   plugins?: CarouselPlugin;
   orientation?: "horizontal" | "vertical";
+  autoplay?: boolean;
 }
 
 export interface CarouselEmits {

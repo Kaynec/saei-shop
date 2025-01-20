@@ -29,7 +29,7 @@ import colors from "tailwindcss/colors";
         >
       </template>
       <template #content>
-        <div class="grid grid-cols-auto-fit-100 gap-8">
+        <div class="grid grid-cols-auto-fit-200 gap-8">
           <div
             v-for="i in 5"
             class="p-2 flex flex-col gap-6 items-center justify-center min-h-96 rounded-lg beforeclass"
@@ -54,7 +54,7 @@ import colors from "tailwindcss/colors";
         <span class="text-2xl font-semibold">گالری تصاویر</span>
       </template>
       <template #content>
-        <div class="grid grid-cols-auto-fit-100 gap-8">
+        <div class="grid grid-cols-auto-fit-200 gap-8">
           <div
             class="aspect-[1] w-full rounded-lg bg-orange-300 img-with-border"
             v-for="i in 5"

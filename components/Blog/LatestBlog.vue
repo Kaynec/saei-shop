@@ -1,5 +1,5 @@
 <template>
-  <section class="flex flex-col gap-4 items-center justify-center px-4">
+  <section class="flex flex-col gap-4 items-center justify-center">
     <div class="p-4">
       <h3 class="font-semibold text-2xl">
         <span>جدیدترین </span>

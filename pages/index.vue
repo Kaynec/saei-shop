@@ -1,63 +1,66 @@
 <template>
-  <main class="space-y-8 p-2 lg:p-4">
-    <SpecialOffer />
+  <main class="space-y-8 pb-12">
+    <ImageSlider />
+    <div class="px-2 md:px-4 lg:px-6 xl:px-10">
+      <SpecialOffer />
 
-    <ProductList v-bind="redCarouselData" variant="bordered" />
+      <ProductList
+        v-bind="redCarouselData"
+        variant="bordered"
+        theme-color="red"
+      />
 
-    <LatestBlog />
-    <!-- <ImageSlider /> -->
+      <ProductList
+        v-bind="orangeCarouselData"
+        variant="primary"
+        theme-color="orange"
+      />
 
-    <!-- <ProductList v-bind="orangeCarouselData" variant="primary">
-      <MyCarouselItem
-        v-for="index in 50"
-        :key="index"
-        :class="[
-          ` basis-3/5 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 2xl:basis-1/6`,
-        ]"
-      >
-        <ProductItem
-          image="https://s8.uupload.ir/files/22a4a332ae99a982afb0156d548c3492_(1)_gzn6.png"
-          :score="70"
-          name="کتاب راز"
-          discount_end_time="2025-01-25T15:30:00Z"
-          price="120,000"
-          off_price="150,000"
-          theme-color="red"
-        />
-      </MyCarouselItem>
-    </ProductList>
+      <MyCard class="grid grid-cols-4 bg-white py-8 my-8 text-xs">
+        <div class="flex-center flex-col md:flex-row text-center">
+          <img src="/home/badge.png" alt="badge category picture" width="100" />
+          <span>ضمانت اصلات کالا</span>
+        </div>
+        <div class="flex-center flex-col md:flex-row text-center">
+          <img src="/home/truck.png" alt="truck category picture" width="100" />
 
-    <ProductList v-bind="redCarouselData" variant="bordered" /> -->
+          <span>ارسال به سراسر کشور</span>
+        </div>
+        <div class="flex-center flex-col md:flex-row text-center">
+          <img src="/home/cart.png" alt="cart category picture" width="100" />
+
+          <span>ضمانت اصلات کالا</span>
+        </div>
+        <div class="flex-center flex-col md:flex-row text-center">
+          <img
+            src="/home/headphone.png"
+            alt="headphone category picture"
+            width="100"
+          />
+          <span>مشاوره رایگان خرید</span>
+        </div>
+      </MyCard>
+
+      <LatestBlog />
+    </div>
   </main>
 </template>
 
 <script setup lang="ts">
 const redCarouselData = {
-  headerImage:
-    "https://s8.uupload.ir/files/kisspng-old-magic-book-children-s-literature-magic-book-5b0dc6aa555dc0_1_to0p.png",
+  headerImage: "/pencil.png",
   headerText: "کتاب و لوازم التحریر",
-  themeColor: "red" as const,
-  opts: {
-    align: "start",
-  },
-  showNuxtImg: false,
-  nuxtImgUrl: "https://s8.uupload.ir/files/-children-_lc15.png",
+  themeColor: "red",
+  showNuxtImg: true,
+  nuxtImgUrl: "/child.png",
 };
 
 const orangeCarouselData = {
-  headerImage:
-    "https://s8.uupload.ir/files/kisspng-colored-pencil-vector-pencil-and-pen-5aa8d4cbd6c650_1_nb3p.png",
-  headerText: "لوازم التحریر و ابزار",
-  themeColor: "orange" as const,
-  opts: {
-    align: "start",
-  },
-  showNuxtImg: true,
-  nuxtImgUrl: "https://s8.uupload.ir/files/-children-_lc15.png",
-};
+  headerImage: "/book.png",
 
-// import emblaCarouselVue from "embla-carousel-vue";
-// import Carousel from "~/components/Carousel/Carousel.vue";
-// import MyCarouselContent from "~/components/Carousel/MyCarouselContent.vue";
-// const [emblaRef] = emblaCarouselVue();
+  headerText: "لوازم التحریر و ابزار",
+  themeColor: "orange",
+  showNuxtImg: false,
+  nuxtImgUrl: "/child.png",
+};
 </script>

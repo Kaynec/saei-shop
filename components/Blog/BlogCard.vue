@@ -1,5 +1,5 @@
 <template>
-  <Card class="bg-white shadow-md rounded-lg overflow-hidden">
+  <Card class="bg-white shadow-md rounded-lg overflow-hidden text-sm">
     <template #header>
       <div class="p-2">
         <NuxtImg
@@ -11,7 +11,7 @@
     </template>
 
     <template #title>
-      <h2 class="text-xl font-bold text-gray-500">{{ title }}</h2>
+      <p class="text-lg font-bold text-gray-700">{{ title }}</p>
       <!-- Dynamic title -->
     </template>
 

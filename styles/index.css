@@ -8,6 +8,10 @@
   @tailwind components;
   @tailwind utilities;
 
+  .my-input {
+    @apply w-full;
+  }
+
   .flex-center {
     @apply flex items-center justify-center;
   }
@@ -60,5 +64,5 @@ body {
   font-family: YekanBakh, "Sans-Serif";
   direction: rtl;
   line-height: -2px !important;
-  background: rgb(234, 234, 234);
+  background: rgba(250, 246, 246, 0.795);
 }
