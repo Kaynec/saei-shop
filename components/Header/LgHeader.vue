@@ -19,7 +19,11 @@
         <MyButton color="bg-grey-50" class="aspect-square w-12 h-12">
           <Icon name="mdi-bell-outline" class="text-2xl text-grey-400" />
         </MyButton>
-        <MyButton color="bg-orange-400" class="px-2">
+        <MyButton
+          @click="globalState.toggleLoginDialog()"
+          color="bg-orange-400"
+          class="px-2"
+        >
           <span> ورود / ثبت نام </span>
           <Icon name="mdi:account-outline" class="text-2xl" />
         </MyButton>
@@ -49,6 +53,8 @@
 </template>
 
 <script setup lang="ts">
+import { useGlobalState } from "~/store/global";
+
 onMounted(() => {
   var toggleOpen = document.getElementById("toggleOpen");
   var toggleClose = document.getElementById("toggleClose");
@@ -68,6 +74,8 @@ onMounted(() => {
   toggleOpen?.addEventListener("click", handleClick);
   toggleClose?.addEventListener("click", handleClick);
 });
+
+const globalState = useGlobalState();
 </script>
 
 <style scoped></style>

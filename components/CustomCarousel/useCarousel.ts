@@ -39,6 +39,8 @@ const [useProvideCarousel, useInjectCarousel] = createInjectionState(
     function onSelect(api: CarouselApi) {
       canScrollNext.value = api?.canScrollNext() || false;
       canScrollPrev.value = api?.canScrollPrev() || false;
+      stopAutoplay();
+      startAutoplay();
     }
 
     function startAutoplay() {

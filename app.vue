@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
   <!-- Class For Container Paddings -->
   <!-- sm:px-4 md:px-6 xl:px-10 -->
@@ -8,6 +6,7 @@
   <!--  -->
   <NuxtLayout>
     <div class="flex min-h-[100svh] flex-col max-w-full text-gray-900">
+      <LoginSignup />
       <Header />
       <NuxtPage />
       <Footer />

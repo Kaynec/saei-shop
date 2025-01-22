@@ -35,7 +35,7 @@ export const useAutoplay = (emblaApi: EmblaCarouselType): UseAutoplayType => {
 
   // Watch for changes in the emblaApi and update the autoplay state accordingly
   watch(
-    emblaApi,
+    () => emblaApi,
     (newApi) => {
       if (!newApi) return;
 

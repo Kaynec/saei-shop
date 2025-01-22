@@ -66,3 +66,10 @@ body {
   line-height: -2px !important;
   background: rgba(250, 246, 246, 0.795);
 }
+:root:has(.no-doc-scroll) {
+  overflow: hidden;
+}
+
+.p-dataview-content {
+  background: transparent;
+}
