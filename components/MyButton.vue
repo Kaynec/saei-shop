@@ -10,6 +10,7 @@ import { defineProps, computed } from "vue";
 // Define props interface
 interface MyButtonProps {
   color?: string;
+  class?: string;
   hoverColor?: string;
 }
 
@@ -20,6 +21,9 @@ const props = defineProps<MyButtonProps>();
 const buttonClasses = computed(() => {
   const defaultColor = props.color || "bg-blue-500";
 
-  return `${defaultColor}  text-white rounded-lg text-sm py-3  items-center flex justify-center transition-colors duration-400 hover:bg-opacity-70`;
+  return [
+    `${defaultColor} text-inherit rounded-lg text-sm py-3  items-center flex justify-center transition-colors duration-400 hover:bg-opacity-70`,
+    props.class ?? "",
+  ];
 });
 </script>

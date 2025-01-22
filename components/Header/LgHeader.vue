@@ -21,7 +21,7 @@
         </MyButton>
         <MyButton
           @click="globalState.toggleLoginDialog()"
-          color="bg-orange-400"
+          color="bg-orange-400 text-white"
           class="px-2"
         >
           <span> ورود / ثبت نام </span>

@@ -80,7 +80,11 @@
 
         <!-- Button Section -->
         <div class="flex pb-3 pt-1 gap-1 mt-1">
-          <MyButton color="bg-orange-400" class="basis-3/5 gap-2" unstyled>
+          <MyButton
+            color="bg-orange-400"
+            class="basis-3/5 gap-2 text-white"
+            unstyled
+          >
             <Icon name="mdi:basket-outline" class="text-xl" />
             <span>افزودن به سبد</span>
           </MyButton>
