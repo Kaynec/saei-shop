@@ -1,399 +1,354 @@
 <template>
-  <main class="p-4 py-16 grid grid-cols-12 gap-4">
-    <div class="col-span-3 rounded">
-      <MyCard class="flex flex-col gap-3 col-span-4 lg:col-span-1">
-        <div class="flex-center">
-          <span>فیلترها</span>
-        </div>
-        <InputText
-          v-model="search"
-          placeholder="جست جو محصول"
-          class="z-3"
-          style="border-radius: 0.5rem; color: #fff"
+  <main class="p-4 py-16 grid grid-cols-12 gap-4 min-h-[65svh] relative">
+    <template v-if="status === 'success'">
+      <Dialog
+        :pt="{
+          root: 'p-dialog-maximized',
+        }"
+        class="block md:hidden w-full"
+        modal
+        maximizable
+        v-model:visible="visible"
+      >
+        <template #header>
+          <div>
+            <FilterButton @click="visible = !visible" />
+          </div>
+        </template>
+        <ProductPageFilters v-model="model" />
+      </Dialog>
+
+      <Dialog
+        class="block md:hidden w-full"
+        modal
+        maximizable
+        v-model:visible="visibleSortBy"
+        :pt="{
+          root: 'p-dialog-maximized',
+        }"
+      >
+        <template #header>
+          <div>
+            <SortButton />
+          </div>
+        </template>
+        <ProductPageSortBy
+          :CurrentFilterCondition="model.CurrentFilterCondition"
+          :changeSort="changeSort"
+        />
+      </Dialog>
+
+      <div class="hidden md:grid md:col-span-4 xl:col-span-3 rounded">
+        <ProductPageFilters v-model="model" />
+      </div>
+      <DataView
+        layout="grid"
+        :value="products"
+        class="col-span-12 md:col-span-8 xl:col-span-9"
+        paginator
+        :rows="20"
+        data-key="products"
+      >
+        <template #empty> محصولاتی یافت نشد </template>
+        <template
+          #paginatorcontainer="{
+            first,
+            last,
+            page,
+            pageCount,
+            prevPageCallback,
+            nextPageCallback,
+            lastPageCallback,
+            firstPageCallback,
+            totalRecords,
+          }"
         >
-          <Icon name="mdi-search" class="text-blue-9"></Icon>
-        </InputText>
+          <MyPaginator
+            :first="first"
+            :last="last"
+            :page="page"
+            :pageCount="pageCount"
+            :totalRecords="totalRecords"
+            :prevPageCallback="prevPageCallback"
+            :nextPageCallback="nextPageCallback"
+            :lastPageCallback="lastPageCallback"
+            :firstPageCallback="firstPageCallback"
+          />
+        </template>
 
-        <List class="rounded-24px bg-dark pa-lg text-text-primary">
-          <Divider />
-          <Accordion :value="['0']" multiple>
-            <AccordionPanel value="0">
-              <AccordionHeader>دسته بندی</AccordionHeader>
-              <AccordionContent>
-                <div class="flex flex-col gap-2">
-                  <div class="flex items-center gap-2">
-                    <Checkbox inputId="ingredient1" value="irani" />
-                    <label for="ingredient1"> ایرانی </label>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <Checkbox inputId="ingredient1" value="irani" />
-                    <label for="ingredient1"> آمریکایی </label>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionPanel>
+        <template #header>
+          <div class="flex md:hidden gap-2">
+            <FilterButton @click="visible = true" />
 
-            <AccordionPanel value="1">
-              <AccordionHeader>برند</AccordionHeader>
-              <AccordionContent>
-                <div class="flex flex-col gap-2">
-                  <div class="flex items-center gap-2">
-                    <Checkbox inputId="ingredient1" value="irani" />
-                    <label for="ingredient1"> ایرانی </label>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <Checkbox inputId="ingredient1" value="irani" />
-                    <label for="ingredient1"> آمریکایی </label>
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionPanel>
-            <AccordionPanel value="3">
-              <AccordionHeader>قیمت</AccordionHeader>
-              <AccordionContent>
-                <div class="flex flex-col gap-4">
-                  <div class="flex justify-between">
-                    <span> از </span>
-                    <span class="flex-center gap-2">
-                      {{ priceRange?.[0] }}
-                      <Tooman />
-                    </span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span> تا </span>
-                    <span class="flex-center gap-2">
-                      {{ priceRange?.[1] }}
-                      <Tooman />
-                    </span>
-                  </div>
-                </div>
-                <div class="relative py-4">
-                  <span class="absolute left-0 -bottom-4">گران‌ترین</span>
-                  <Slider v-model="priceRange" range />
+            <SortButton @click="visibleSortBy = true" />
+          </div>
 
-                  <span class="absolute right-0 -bottom-4">ارزان‌ترین</span>
-                </div>
-              </AccordionContent>
-            </AccordionPanel>
-          </Accordion>
+          <ProductPageSortBy
+            class="hidden md:flex"
+            :CurrentFilterCondition="model.CurrentFilterCondition"
+            :changeSort="changeSort"
+          />
+        </template>
 
-          <div class="flex flex-col my-lg">
-            <div class="flex justify-between p-2">
-              <label>فقط کالاهای موجود</label>
-              <ToggleSwitch
-                v-model="availableToggle"
-                onLabel="فقط کالاهای موجود"
-                offLabel=""
+        <template #grid="slotProps">
+          <div class="flex flex-wrap -ml-3 -mt-3">
+            <div
+              v-for="(item, index) in slotProps.items"
+              class="basis-full md:basis-2/4 xl:basis-1/4 pt-3 pl-3"
+            >
+              <ProductItem
+                :key="index"
+                :image="item.main_image"
+                :score="item.score"
+                :name="item.title"
+                :discount_end_time="item.discount_end_time"
+                :price="item.price"
+                :off_price="item.off_price"
+                themeColor="orange"
+                class="shadow-xl"
               />
             </div>
           </div>
-        </List>
-      </MyCard>
-    </div>
-    <DataView
-      layout="grid"
-      :value="products"
-      class="col-span-9"
-      paginator
-      :rows="20"
-      data-key="products"
+        </template>
+      </DataView>
+    </template>
+    <FitLoadingScreen v-else-if="status === 'pending'" />
+
+    <Message
+      class="col-span-12 flex-center"
+      severity="error"
+      v-else-if="status === 'error'"
+      >خطایی رخ داده است</Message
     >
-      <template
-        #paginatorcontainer="{
-          first,
-          last,
-          page,
-          pageCount,
-          prevPageCallback,
-          nextPageCallback,
-          lastPageCallback,
-          firstPageCallback,
-          totalRecords,
-        }"
-      >
-        <MyPaginator
-          :first="first"
-          :last="last"
-          :page="page"
-          :pageCount="pageCount"
-          :totalRecords="totalRecords"
-          :prevPageCallback="prevPageCallback"
-          :nextPageCallback="nextPageCallback"
-          :lastPageCallback="lastPageCallback"
-          :firstPageCallback="firstPageCallback"
-        />
-      </template>
-
-      <template #header>
-        <section class="flex gap-2 !text-lg !text-grey-500">
-          <MyButton color="bg-transparent" class="flex-center gap-2">
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 48 48"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect width="48" height="48" rx="5" fill="#F5F5F5" />
-              <path
-                d="M31 34V23"
-                stroke="#575757"
-                stroke-width="1.5"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M31 19V14"
-                stroke="#575757"
-                stroke-width="1.5"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M24 34V29"
-                stroke="#575757"
-                stroke-width="1.5"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M24 25V14"
-                stroke="#575757"
-                stroke-width="1.5"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M17 34V23"
-                stroke="#575757"
-                stroke-width="1.5"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M17 19V14"
-                stroke="#575757"
-                stroke-width="1.5"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M15 23H19"
-                stroke="#575757"
-                stroke-width="1.5"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M29 23H33"
-                stroke="#575757"
-                stroke-width="1.5"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M22 25H26"
-                stroke="#575757"
-                stroke-width="1.5"
-                stroke-miterlimit="10"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-
-            <span class="text-lg"> مرتب سازی : </span>
-          </MyButton>
-          <MyButton @click="changeSort('score')" color="bg-transparent">
-            <span
-              :class="activeSort == 'score' ? 'text-orange-300' : ''"
-              class="text-lg"
-            >
-              محبوب‌ترین
-            </span>
-          </MyButton>
-          <MyButton @click="changeSort('high_price')" color="bg-transparent">
-            <span
-              :class="activeSort == 'high_price' ? 'text-orange-300' : ''"
-              class="text-lg"
-            >
-              گران‌ترین
-            </span>
-          </MyButton>
-          <MyButton @click="changeSort('low_price')" color="bg-transparent">
-            <span
-              :class="activeSort == 'low_price' ? 'text-orange-300' : ''"
-              class="text-lg"
-            >
-              ارزان‌ترین
-            </span>
-          </MyButton>
-          <MyButton @click="changeSort('newsest')" color="bg-transparent">
-            <span
-              :class="activeSort == 'newsest' ? 'text-orange-300' : ''"
-              class="text-lg"
-            >
-              جدید‌ترین
-            </span>
-          </MyButton>
-          <MyButton @click="changeSort('most_selled')" color="bg-transparent">
-            <span
-              :class="activeSort == 'most_selled' ? 'text-orange-300' : ''"
-              class="text-lg"
-            >
-              پرفروش‌ترین
-            </span>
-          </MyButton>
-        </section>
-      </template>
-
-      <template #grid="slotProps">
-        <div class="flex flex-wrap -ml-3 -mt-3">
-          <div
-            v-for="(item, index) in slotProps.items"
-            class="basis-full md:basis-2/4 xl:basis-1/4 pt-3 pl-3"
-          >
-            <ProductItem
-              :key="index"
-              image="https://s3-alpha-sig.figma.com/img/dbb6/728f/22a4a332ae99a982afb0156d548c3492?Expires=1737936000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=UsBqGIsKw15RoEMKEH9yaqXwzMdq6SWXf~yirvuYyEFJmdvr6dlj-fG5rYdbEl0FETwWGNBNsJvNe~yV9dx~O-TCgCeSOI5ahk1viYD2Lb-d1ABZ1QhfeV2c9PkTNb9l1tHnZ12WWhKp9a5i~qRczDvWtoSWIx4Q28momgh0P6Be4SGF9q3Ntn9wnUC9Uw49VbPyFW0b-AYm-QkNiWHR~fDtiRCetqt-BJXbDGOMT1BDIOw-xS4X4W543XdNNn5E4USorX8x1LgCadUp5Z4vIY4iVep3uYGdmLVG5pdU1DtmPb6BgHaxR1nXcY7~RZJnWmbyC4kFBuhfgnFbOcjybA__"
-              :score="70"
-              name="کتاب راز"
-              discount_end_time="2025-01-25T15:30:00Z"
-              price="120,000"
-              off_price="150,000"
-              themeColor="orange"
-              class="shadow-xl"
-            >
-              <div
-                class="p-6 border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-900 rounded flex flex-col"
-              >
-                <div class="bg-surface-50 flex justify-center rounded p-4">
-                  <div class="relative mx-auto">
-                    <img
-                      class="rounded w-full"
-                      :src="`https://primefaces.org/cdn/primevue/images/product/${item.image}`"
-                      :alt="item.name"
-                      style="max-width: 300px"
-                    />
-                    <div
-                      class="absolute bg-black/70 rounded-border"
-                      style="left: 4px; top: 4px"
-                    >
-                      <Tag
-                        :value="item.inventoryStatus"
-                        :severity="getSeverity(item)"
-                      ></Tag>
-                    </div>
-                  </div>
-                </div>
-                <div class="pt-6">
-                  <div class="flex flex-row justify-between items-start gap-2">
-                    <div>
-                      <span
-                        class="font-medium text-surface-500 dark:text-surface-400 text-sm"
-                        >{{ item.category }}</span
-                      >
-                      <div class="text-lg font-medium mt-1">
-                        {{ item.name }}
-                      </div>
-                    </div>
-                    <div class="bg-surface-100 p-1" style="border-radius: 30px">
-                      <div
-                        class="bg-surface-0 flex items-center gap-2 justify-center py-1 px-2"
-                        style="
-                          border-radius: 30px;
-                          box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04),
-                            0px 1px 2px 0px rgba(0, 0, 0, 0.06);
-                        "
-                      >
-                        <span class="text-surface-900 font-medium text-sm">{{
-                          item.rating
-                        }}</span>
-                        <i class="pi pi-star-fill text-yellow-500"></i>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="flex flex-col gap-6 mt-6">
-                    <span class="text-2xl font-semibold"
-                      >${{ item.price }}</span
-                    >
-                    <div class="flex gap-2">
-                      <Button
-                        icon="pi pi-shopping-cart"
-                        label="Buy Now"
-                        :disabled="item.inventoryStatus === 'OUTOFSTOCK'"
-                        class="flex-auto whitespace-nowrap"
-                      ></Button>
-                      <Button icon="pi pi-heart" outlined></Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </ProductItem>
-          </div>
-        </div>
-      </template>
-    </DataView>
   </main>
 </template>
 
-<script setup lang="ts">
-const products = ref(
-  Array(100).map((el) => ({
-    key: "index",
-    class: "col-span-12 sm:col-span-6 md:col-span-4 xl:col-span-6 p-2",
-    image:
-      "https://s3-alpha-sig.figma.com/img/dbb6/728f/22a4a332ae99a982afb0156d548c3492?Expires=1737936000&Key-Pair-Id:APKAQ4GOSFWCVNEHN3O4&Signature:UsBqGIsKw15RoEMKEH9yaqXwzMdq6SWXf~yirvuYyEFJmdvr6dlj-fG5rYdbEl0FETwWGNBNsJvNe~yV9dx~O-TCgCeSOI5ahk1viYD2Lb-d1ABZ1QhfeV2c9PkTNb9l1tHnZ12WWhKp9a5i~qRczDvWtoSWIx4Q28momgh0P6Be4SGF9q3Ntn9wnUC9Uw49VbPyFW0b-AYm-QkNiWHR~fDtiRCetqt-BJXbDGOMT1BDIOw-xS4X4W543XdNNn5E4USorX8x1LgCadUp5Z4vIY4iVep3uYGdmLVG5pdU1DtmPb6BgHaxR1nXcY7~RZJnWmbyC4kFBuhfgnFbOcjybA__",
-    score: "70",
-    name: "کتاب راز",
-    discount_end_time: "2025-01-25T15:30:00Z",
-    price: "120,000",
-    off_price: "150,000",
-    themeColor: "yellow",
-  }))
-);
-const getSeverity = (product: Record<string, any>) => {
-  switch (product.inventoryStatus) {
-    case "INSTOCK":
-      return "success";
+<script setup lang="tsx">
+import type {
+  Label,
+  Brand,
+  CategoryOutPutWithSelected,
+  BrandWithSelected,
+} from "@/types";
+import { ProductTypes, PriceTypes, CategoryTypes } from "@/types";
 
-    case "LOWSTOCK":
-      return "warn";
+import {
+  apiProductBrandListRetrieve,
+  apiProductCategoryListRetrieve,
+  apiProductGetProductRetrieve,
+  type ApiProductGetProductRetrieveParams,
+  type CategoryOutPut,
+  type ProudctOutPut,
+} from "@/api";
+import { useDebounceFn } from "@vueuse/core";
+import MyButtonSvg from "~/components/Product/MyButtonSvg.vue";
+import MyButton from "~/components/MyButton.vue";
+import { Icon } from "#components";
 
-    case "OUTOFSTOCK":
-      return "danger";
+useSeoMeta({
+  title: "Saei  - Products",
+  ogTitle: "Saei  - Products",
+  description: "محصولات",
+  ogDescription: "محصولات",
+});
 
-    default:
-      return null;
-  }
-};
+const router = useRouter();
 
-type Sort = "low_price" | "high_price" | "most_selled" | "newsest" | "score";
+const baseCategoryType = ProductTypes.PHYCICAL;
 
-const activeSort = ref<Sort>("low_price");
-
-function changeSort(sort: Sort) {
-  activeSort.value = sort;
+function filterBasedOnPriceOrder() {
+  if (model.value.CurrentFilterCondition === "Newset") return PriceTypes.NEWEST;
+  if (model.value.CurrentFilterCondition === "MostExpensive")
+    return PriceTypes.EXPENSIVE;
+  if (model.value.CurrentFilterCondition === "Cheapest")
+    return PriceTypes.INEXPENSIVE;
+  if (model.value.CurrentFilterCondition === "MostPopular")
+    return PriceTypes.FAVOURITE;
 }
 
-const search = ref("");
+const filterConditions = {
+  All: "همه محصولات",
+  Newset: "جدید ترین",
+  Cheapest: "ارزان ترین",
+  MostExpensive: "گران ترین",
+  MostPopular: "پرفروش ترین",
+};
 
-const discountedToggle = ref(false);
+function changeSort(sort: keyof typeof filterConditions) {
+  model.value.CurrentFilterCondition = sort;
+}
 
-const availableToggle = ref(false);
+const model = ref({
+  search: "",
+  is_exists: false,
+  has_discount: Boolean(
+    router.currentRoute.value.query.has_discount ?? undefined
+  ),
+  CurrentFilterCondition: "MostExpensive",
+  categories: [] as CategoryOutPutWithSelected[],
+  brands: [] as BrandWithSelected[],
+});
 
-const selectedBrands = ref<string[]>([]);
+// IF A ORDER BY PROPERTY HAS BEEN SET , SET THE FILTER CONDITION TO THAT
+const order_by = parseInt(
+  router.currentRoute.value.query.order_by?.toString() ?? "NaN"
+);
+if (order_by === PriceTypes.FAVOURITE) {
+  model.value.CurrentFilterCondition = filterConditions.MostPopular;
+}
 
-const selectedTypes = ref<string[]>([]);
+/**
+ * Computes the filter parameters to pass to the product API based on
+ * the filter condition, search terms, and other filters set in the component's
+ * reactive model.
+ */
 
-const priceRange = ref([0, 100]);
+function populateFilterTypes() {
+  const reactive = {} as ApiProductGetProductRetrieveParams & {
+    offset: number;
+    categories__in: string;
+    labels__in: string;
+  };
+  const orderByValue = filterBasedOnPriceOrder();
+  if (orderByValue) reactive.order_by = orderByValue;
+  if (model.value.has_discount) reactive.has_discount = "True";
+  if (model.value.is_exists) reactive.is_exists = "True";
+  reactive.categories__in = model.value.categories
+    .filter((cat) => cat.value)
+    .map((el) => el.id)
+    .join(",");
+
+  reactive.labels__in = model.value.brands
+    .filter((cat) => cat.value)
+    .map((el) => el.id)
+    .join(",");
+
+  reactive.search = model.value.search;
+  reactive.product_type = baseCategoryType!;
+  reactive.offset = current.value * limit.value - limit.value;
+
+  return reactive;
+}
+
+const brands = ref<Brand[]>([]);
+const categories = ref<CategoryOutPut[]>([]);
+
+const current = ref(0);
+const limit = ref(10);
+const max = ref(0);
+
+const filterTypes = ref();
+
+const {
+  data: products,
+  refresh: refreshProducts,
+  status,
+} = useAsyncData(
+  "products",
+  async () => {
+    try {
+      if (!categories.value.length && !brands.value.length) {
+        categories.value = (await apiProductCategoryListRetrieve(
+          CategoryTypes.PRODUCT
+        )) as unknown as CategoryOutPut[];
+        brands.value =
+          (await apiProductBrandListRetrieve()) as unknown as Brand[];
+        setUpBrandAndCategories();
+      }
+
+      const data = (await apiProductGetProductRetrieve(
+        filterTypes.value
+      )) as any;
+
+      limit.value = data.limit;
+      max.value = Math.ceil(data.count / limit.value);
+      if (!current.value) {
+        current.value = 1;
+      }
+      populateFilterTypes();
+      return data.results as ProudctOutPut[];
+    } catch (error) {
+      throw new Error("bob");
+    }
+  },
+  {
+    lazy: true,
+  }
+);
+
+const debounceFn = useDebounceFn(() => {
+  refreshProducts();
+}, 500);
+
+watch(
+  model.value,
+  () => {
+    filterTypes.value = populateFilterTypes();
+    debounceFn();
+  },
+  { deep: true }
+);
+
+// Just Flatlining The Response Into One Array
+function recursiveWrapper(labels: CategoryOutPut[]) {
+  const result: Label[] = [];
+  function recursivelyFindAllChildrenElement(labels: any[]) {
+    if (!labels || !labels.length) return;
+
+    labels.forEach((el) => {
+      const { children, ...rest } = el;
+      result.push(rest);
+      recursivelyFindAllChildrenElement(children);
+    });
+  }
+  recursivelyFindAllChildrenElement(labels);
+  return result;
+}
+
+function setUpBrandAndCategories() {
+  model.value.brands =
+    brands.value?.map((el) => ({
+      ...el,
+      value: false,
+    })) ?? [];
+
+  model.value.categories = recursiveWrapper(categories.value ?? []).map(
+    (el) => ({
+      ...el,
+      value: false,
+    })
+  );
+
+  const index = model.value.categories.findIndex(
+    (el) => el.id === +router.currentRoute.value.query.category_id!
+  );
+
+  if (index >= 0) {
+    model.value.categories[index].value = true;
+  }
+}
+
+const visible = ref(false);
+const visibleSortBy = ref(false);
+
+function FilterButton() {
+  return (
+    <MyButton color="bg-white" class="flex justify-end flex-1 gap-2">
+      <MyButtonSvg />
+
+      <span class="text-sm md:text-lg"> فیلترها : </span>
+    </MyButton>
+  );
+}
+function SortButton() {
+  return (
+    <MyButton color="bg-white" class="flex justify-end flex-1 gap-2">
+      <Icon name="mdi:filter-variant" class="text-lg" />
+
+      <span class="text-sm md:text-lg"> مرتب سازی : </span>
+    </MyButton>
+  );
+}
 </script>
 
 <style scoped>

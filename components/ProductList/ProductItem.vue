@@ -58,7 +58,7 @@
 <script setup lang="ts">
 const { themeColor, ...props } = defineProps<{
   image: string;
-  score: number;
+  score: number | string;
   name: string; // Assuming name is a string (e.g., book title)
   discount_end_time?: string; // Optional prop for discount end time
   price: string;

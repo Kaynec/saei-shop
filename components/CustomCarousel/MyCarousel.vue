@@ -25,7 +25,6 @@ const {
 } = useProvideCarousel(props, emits);
 
 onMounted(() => {
-  console.log(props.autoplay, useAutoplay(carouselApi.value!));
   if (!props.autoplay) return;
   setTimeout(() => {
     useAutoplay(carouselApi.value!).toggleAutoplay();

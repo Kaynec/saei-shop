@@ -9,6 +9,13 @@
       <LoginSignup />
       <Header />
       <NuxtPage />
+
+      <!-- <NuxtErrorBoundary>
+        <NuxtPage />
+        <template #error="{ error }">
+          <p>An error occurred: {{ error }}</p>
+        </template>
+      </NuxtErrorBoundary> -->
       <Footer />
     </div>
   </NuxtLayout>

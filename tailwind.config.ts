@@ -53,7 +53,12 @@ const safeColours = colors.flatMap((color) => {
 });
 // tailwind.config.js
 module.exports = {
-  safelist: [...safeColours],
+  safelist: [
+    ...safeColours,
+    "absolute z-50 bg-primary bg-opacity-10 backdrop-blur inset-0 w-full h-full flex justify-center items-center",
+    "w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600",
+    "sr-only",
+  ],
 
   theme: {
     extend: {

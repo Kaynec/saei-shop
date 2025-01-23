@@ -27,7 +27,6 @@
 const showPassword = ref(true);
 
 function togglePassword() {
-  console.log("xo xo");
   showPassword.value = !showPassword.value;
 }
 

@@ -68,6 +68,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxtjs/mdc",
     "@nuxtjs/seo",
+    "@pinia/nuxt",
   ],
 
   icon: {

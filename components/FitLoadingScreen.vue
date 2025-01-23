@@ -1,0 +1,7 @@
+<template>
+  <div
+    class="absolute z-50 bg-primary bg-opacity-10 backdrop-blur inset-0 w-full h-full flex-center"
+  >
+    <ProgressSpinner />
+  </div>
+</template>

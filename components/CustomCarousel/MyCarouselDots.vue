@@ -55,7 +55,6 @@ carouselApi.value?.on("select", (newdata) => {
 watchEffect(() => {
   if (carouselApi.value) {
     carouselApi.value.on("select", (newdata) => {
-      console.log("xo xo");
       selected.value = newdata.selectedScrollSnap();
     });
 
