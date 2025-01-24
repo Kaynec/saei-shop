@@ -7,7 +7,7 @@
         class="w-12 h-12 border-2 border-surface"
         color="bg-transparent"
         @click="firstPageCallback"
-        :disabled="page === 0"
+        :disabled="page === 1"
       >
         <Icon
           name="mdi:chevron-double-right"
@@ -20,7 +20,7 @@
         class="w-12 h-12 border-2 border-primary"
         color="bg-transparent"
         @click="prevPageCallback"
-        :disabled="page === 0"
+        :disabled="page === 1"
       >
         <Icon
           name="mdi:chevron-right"
@@ -30,13 +30,15 @@
         />
       </MyButton>
       <span class="hidden sm:block"
-        >نمایش {{ first }} تا {{ last }} از {{ totalRecords }}</span
+        >نمایش {{ (page - 1) * limit }} تا
+        {{ page === pageCount ? totalRecords : page * limit }} از
+        {{ totalRecords }}</span
       >
       <MyButton
         class="w-12 h-12 border-2 border-primary"
         color="bg-transparent"
         @click="nextPageCallback"
-        :disabled="page === pageCount - 1"
+        :disabled="page === pageCount"
       >
         <Icon
           name="mdi:chevron-left"
@@ -49,7 +51,7 @@
         class="w-12 h-12 border-2 border-surface"
         color="bg-transparent"
         @click="lastPageCallback"
-        :disabled="page === pageCount - 1"
+        :disabled="page === pageCount"
       >
         <Icon
           name="mdi:chevron-double-left"
@@ -64,9 +66,8 @@
 
 <script lang="ts" setup>
 interface PaginatorProps {
-  first: number;
-  last: number;
   page: number;
+  limit: number;
   pageCount: number;
   totalRecords: number;
   prevPageCallback: () => void;
@@ -76,9 +77,8 @@ interface PaginatorProps {
 }
 
 const {
-  first,
-  last,
   page,
+  limit,
   pageCount,
   totalRecords,
   prevPageCallback,

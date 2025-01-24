@@ -1,123 +1,89 @@
 <template>
   <main class="p-4 py-16 grid grid-cols-12 gap-4 min-h-[65svh] relative">
-    <template v-if="status === 'success'">
-      <Dialog
-        :pt="{
-          root: 'p-dialog-maximized',
-        }"
-        class="block md:hidden w-full"
-        modal
-        maximizable
-        v-model:visible="visible"
-      >
-        <template #header>
-          <div>
-            <FilterButton @click="visible = !visible" />
-          </div>
-        </template>
-        <ProductPageFilters v-model="model" />
-      </Dialog>
+    <Dialog
+      :pt="{
+        root: 'p-dialog-maximized',
+      }"
+      class="block md:hidden w-full"
+      modal
+      maximizable
+      v-model:visible="visible"
+    >
+      <template #header>
+        <div>
+          <FilterButton @click="visible = !visible" />
+        </div>
+      </template>
+      <ProductPageFilters v-model="model" />
+    </Dialog>
 
-      <Dialog
-        class="block md:hidden w-full"
-        modal
-        maximizable
-        v-model:visible="visibleSortBy"
-        :pt="{
-          root: 'p-dialog-maximized',
-        }"
-      >
-        <template #header>
-          <div>
-            <SortButton />
-          </div>
-        </template>
+    <Dialog
+      class="block md:hidden w-full"
+      modal
+      maximizable
+      v-model:visible="visibleSortBy"
+      :pt="{
+        root: 'p-dialog-maximized',
+      }"
+    >
+      <template #header>
+        <div>
+          <SortButton />
+        </div>
+      </template>
+      <ProductPageSortBy
+        :CurrentFilterCondition="model.CurrentFilterCondition"
+        :changeSort="changeSort"
+      />
+    </Dialog>
+
+    <div class="hidden md:grid md:col-span-4 xl:col-span-3 rounded">
+      <ProductPageFilters v-model="model" />
+    </div>
+    <DataGrid
+      :items="data?.results"
+      :total-records="data.count"
+      :page="current"
+      :page-count="max"
+      :limit="limit"
+      :first-page-callback="() => (current = 1)"
+      :prev-page-callback="() => (current = current - 1)"
+      :next-page-callback="() => (current = current + 1)"
+      :last-page-callback="() => (current = max)"
+      class="col-span-12 md:col-span-8 xl:col-span-9 flex gap-2 flex-w"
+    >
+      <template #header>
+        <div class="flex md:hidden gap-2">
+          <FilterButton @click="visible = true" />
+
+          <SortButton @click="visibleSortBy = true" />
+        </div>
+
         <ProductPageSortBy
+          class="hidden md:flex"
           :CurrentFilterCondition="model.CurrentFilterCondition"
           :changeSort="changeSort"
         />
-      </Dialog>
-
-      <div class="hidden md:grid md:col-span-4 xl:col-span-3 rounded">
-        <ProductPageFilters v-model="model" />
-      </div>
-      <DataView
-        layout="grid"
-        :value="products"
-        class="col-span-12 md:col-span-8 xl:col-span-9"
-        paginator
-        :rows="20"
-        data-key="products"
-      >
-        <template #empty> محصولاتی یافت نشد </template>
-        <template
-          #paginatorcontainer="{
-            first,
-            last,
-            page,
-            pageCount,
-            prevPageCallback,
-            nextPageCallback,
-            lastPageCallback,
-            firstPageCallback,
-            totalRecords,
-          }"
-        >
-          <MyPaginator
-            :first="first"
-            :last="last"
-            :page="page"
-            :pageCount="pageCount"
-            :totalRecords="totalRecords"
-            :prevPageCallback="prevPageCallback"
-            :nextPageCallback="nextPageCallback"
-            :lastPageCallback="lastPageCallback"
-            :firstPageCallback="firstPageCallback"
-          />
-        </template>
-
-        <template #header>
-          <div class="flex md:hidden gap-2">
-            <FilterButton @click="visible = true" />
-
-            <SortButton @click="visibleSortBy = true" />
-          </div>
-
-          <ProductPageSortBy
-            class="hidden md:flex"
-            :CurrentFilterCondition="model.CurrentFilterCondition"
-            :changeSort="changeSort"
-          />
-        </template>
-
-        <template #grid="slotProps">
-          <div class="flex flex-wrap -ml-3 -mt-3">
-            <div
-              v-for="(item, index) in slotProps.items"
-              class="basis-full md:basis-2/4 xl:basis-1/4 pt-3 pl-3"
-            >
-              <ProductItem
-                :key="index"
-                :image="item.main_image"
-                :score="item.score"
-                :name="item.title"
-                :discount_end_time="item.discount_end_time"
-                :price="item.price"
-                :off_price="item.off_price"
-                themeColor="orange"
-                class="shadow-xl"
-              />
-            </div>
-          </div>
-        </template>
-      </DataView>
-    </template>
-    <FitLoadingScreen v-else-if="status === 'pending'" />
+      </template>
+      <template #grid-item="{ data }">
+        <ProductItem
+          :slug="data.slug"
+          :image="data.main_image"
+          :score="data.score"
+          :name="data.title"
+          :discount_end_time="data.discount_end_time"
+          :price="data.price"
+          :off_price="data.off_price"
+          themeColor="orange"
+          class="shadow-xl h-full"
+        />
+      </template>
+    </DataGrid>
 
     <Message
       class="col-span-12 flex-center"
       severity="error"
-      v-else-if="status === 'error'"
+      v-if="status === 'error'"
       >خطایی رخ داده است</Message
     >
   </main>
@@ -130,7 +96,7 @@ import type {
   CategoryOutPutWithSelected,
   BrandWithSelected,
 } from "@/types";
-import { ProductTypes, PriceTypes, CategoryTypes } from "@/types";
+import { PriceTypes, CategoryTypes } from "@/types";
 
 import {
   apiProductBrandListRetrieve,
@@ -154,7 +120,7 @@ useSeoMeta({
 
 const router = useRouter();
 
-const baseCategoryType = ProductTypes.PHYCICAL;
+// const baseCategoryType = ProductTypes.PHYCICAL;
 
 function filterBasedOnPriceOrder() {
   if (model.value.CurrentFilterCondition === "Newset") return PriceTypes.NEWEST;
@@ -178,16 +144,20 @@ function changeSort(sort: keyof typeof filterConditions) {
   model.value.CurrentFilterCondition = sort;
 }
 
-const model = ref({
-  search: "",
-  is_exists: false,
-  has_discount: Boolean(
-    router.currentRoute.value.query.has_discount ?? undefined
-  ),
-  CurrentFilterCondition: "MostExpensive",
-  categories: [] as CategoryOutPutWithSelected[],
-  brands: [] as BrandWithSelected[],
-});
+const model = useState(
+  "model",
+
+  () => ({
+    search: "",
+    is_exists: false,
+    has_discount: Boolean(
+      router.currentRoute.value.query.has_discount ?? undefined
+    ),
+    CurrentFilterCondition: "MostExpensive",
+    categories: [] as CategoryOutPutWithSelected[],
+    brands: [] as BrandWithSelected[],
+  })
+);
 
 // IF A ORDER BY PROPERTY HAS BEEN SET , SET THE FILTER CONDITION TO THAT
 const order_by = parseInt(
@@ -224,70 +194,18 @@ function populateFilterTypes() {
     .join(",");
 
   reactive.search = model.value.search;
-  reactive.product_type = baseCategoryType!;
+  // reactive.product_type = baseCategoryType!;
   reactive.offset = current.value * limit.value - limit.value;
 
   return reactive;
 }
 
-const brands = ref<Brand[]>([]);
-const categories = ref<CategoryOutPut[]>([]);
-
-const current = ref(0);
+const current = ref(1);
 const limit = ref(10);
 const max = ref(0);
+const count = ref(0);
 
 const filterTypes = ref();
-
-const {
-  data: products,
-  refresh: refreshProducts,
-  status,
-} = useAsyncData(
-  "products",
-  async () => {
-    try {
-      if (!categories.value.length && !brands.value.length) {
-        categories.value = (await apiProductCategoryListRetrieve(
-          CategoryTypes.PRODUCT
-        )) as unknown as CategoryOutPut[];
-        brands.value =
-          (await apiProductBrandListRetrieve()) as unknown as Brand[];
-        setUpBrandAndCategories();
-      }
-
-      const data = (await apiProductGetProductRetrieve(
-        filterTypes.value
-      )) as any;
-
-      limit.value = data.limit;
-      max.value = Math.ceil(data.count / limit.value);
-      if (!current.value) {
-        current.value = 1;
-      }
-      populateFilterTypes();
-      return data.results as ProudctOutPut[];
-    } catch (error) {
-      throw new Error("bob");
-    }
-  },
-  {
-    lazy: true,
-  }
-);
-
-const debounceFn = useDebounceFn(() => {
-  refreshProducts();
-}, 500);
-
-watch(
-  model.value,
-  () => {
-    filterTypes.value = populateFilterTypes();
-    debounceFn();
-  },
-  { deep: true }
-);
 
 // Just Flatlining The Response Into One Array
 function recursiveWrapper(labels: CategoryOutPut[]) {
@@ -305,28 +223,122 @@ function recursiveWrapper(labels: CategoryOutPut[]) {
   return result;
 }
 
-function setUpBrandAndCategories() {
-  model.value.brands =
-    brands.value?.map((el) => ({
+function setUpBrandAndCategories(cats: CategoryOutPut[], brands: Brand[]) {
+  const newBrands =
+    brands?.map((el) => ({
       ...el,
       value: false,
     })) ?? [];
 
-  model.value.categories = recursiveWrapper(categories.value ?? []).map(
-    (el) => ({
-      ...el,
-      value: false,
-    })
-  );
+  const newCategories = recursiveWrapper(cats ?? []).map((el) => ({
+    ...el,
+    value: false,
+  }));
 
-  const index = model.value.categories.findIndex(
+  const index = cats.findIndex(
     (el) => el.id === +router.currentRoute.value.query.category_id!
   );
 
   if (index >= 0) {
-    model.value.categories[index].value = true;
+    newCategories[index].value = true;
   }
+  return {
+    newBrands,
+    newCategories,
+  };
 }
+
+const {
+  data: categoriesAndBrands,
+  status: categoriesAndBrandsStatus,
+  error: categoriesAndBrandsError,
+} = useAsyncData(
+  "categoriesAndBrands",
+  async () => {
+    try {
+      // Fetch categories and brands
+      const categories = (await apiProductCategoryListRetrieve(
+        CategoryTypes.PRODUCT
+      )) as unknown as CategoryOutPut[];
+
+      const brands =
+        (await apiProductBrandListRetrieve()) as unknown as Brand[];
+
+      return {
+        categories,
+        brands,
+      };
+    } catch (error) {
+      throw new Error("Failed to fetch categories and brands");
+    }
+  },
+  {
+    transform(data) {
+      console.log(model.value);
+      const { newCategories, newBrands } = setUpBrandAndCategories(
+        data.categories,
+        data.brands
+      );
+      model.value.categories = newCategories;
+      model.value.brands = newBrands;
+      console.log(model.value);
+
+      return data;
+    },
+  }
+);
+
+const {
+  data,
+  refresh: refreshProducts,
+  status,
+} = useAsyncData("products", async () => {
+  try {
+    console.log("XOXO");
+    return (await apiProductGetProductRetrieve(filterTypes.value)) as any;
+  } catch (error) {
+    throw new Error("bob");
+  }
+});
+
+onMounted(() => {
+  limit.value = data.value.limit;
+  max.value = Math.ceil(data.value.count / limit.value);
+  count.value = data.value.count;
+  if (!data.value.count) {
+    current.value = 0;
+  }
+  // setTimeout(() => {
+  //   console.log(categoriesAndBrands.value);
+  //   categoriesAndBrands.value = [];
+  //   console.log(categoriesAndBrands.value);
+  // }, 2000);
+  // filterTypes.value = populateFilterTypes();
+
+  // // setUpBrandAndCategories();
+
+  // // console.log(limit.value, max.value, count.value);
+});
+
+const debounceFn = useDebounceFn(() => {
+  refreshProducts();
+}, 500);
+
+function watcherComponent() {
+  filterTypes.value = populateFilterTypes();
+  debounceFn();
+}
+
+watch(current, watcherComponent);
+
+watch(
+  model,
+  () => {
+    console.log("WTF MODEL");
+    watcherComponent();
+  },
+  { deep: true }
+);
 
 const visible = ref(false);
 const visibleSortBy = ref(false);

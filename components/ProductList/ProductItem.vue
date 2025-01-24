@@ -1,30 +1,37 @@
 <template>
-  <Card
-    class="border-l-2 border-gray-100 rounded-lg !border-solid shadow-none bg-white select-none"
+  <MyCard
+    class="flex flex-col gap-2 border-l-2 border-gray-100 rounded-lg !border-solid shadow-none bg-white"
   >
-    <template #content>
-      <div class="flex justify-end items-center translate-y-2">
-        <div class="flex items-center gap-1 text-orange-300">
-          <span class="text-xl">{{ score }}</span>
-          <svg
-            width="30"
-            height="30"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M9.15523 2.33977L10.3286 4.68643C10.4886 5.0131 10.9152 5.32643 11.2752 5.38643L13.4019 5.73977C14.7619 5.96643 15.0819 6.9531 14.1019 7.92643L12.4486 9.57977C12.1686 9.85977 12.0152 10.3998 12.1019 10.7864L12.5752 12.8331C12.9486 14.4531 12.0886 15.0798 10.6552 14.2331L8.66189 13.0531C8.30189 12.8398 7.70856 12.8398 7.34189 13.0531L5.34856 14.2331C3.92189 15.0798 3.05523 14.4464 3.42856 12.8331L3.90189 10.7864C3.98856 10.3998 3.83523 9.85977 3.55523 9.57977L1.90189 7.92643C0.928559 6.9531 1.24189 5.96643 2.60189 5.73977L4.72856 5.38643C5.08189 5.32643 5.50856 5.0131 5.66856 4.68643L6.84189 2.33977C7.48189 1.06643 8.52189 1.06643 9.15523 2.33977Z"
-              fill="#F8CE0B"
-              stroke="#F8CE0B"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </div>
+    <div class="flex justify-end items-center translate-y-2">
+      <div class="flex items-center gap-1 text-orange-300">
+        <span class="text-xl">{{ score }}</span>
+        <svg
+          width="30"
+          height="30"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9.15523 2.33977L10.3286 4.68643C10.4886 5.0131 10.9152 5.32643 11.2752 5.38643L13.4019 5.73977C14.7619 5.96643 15.0819 6.9531 14.1019 7.92643L12.4486 9.57977C12.1686 9.85977 12.0152 10.3998 12.1019 10.7864L12.5752 12.8331C12.9486 14.4531 12.0886 15.0798 10.6552 14.2331L8.66189 13.0531C8.30189 12.8398 7.70856 12.8398 7.34189 13.0531L5.34856 14.2331C3.92189 15.0798 3.05523 14.4464 3.42856 12.8331L3.90189 10.7864C3.98856 10.3998 3.83523 9.85977 3.55523 9.57977L1.90189 7.92643C0.928559 6.9531 1.24189 5.96643 2.60189 5.73977L4.72856 5.38643C5.08189 5.32643 5.50856 5.0131 5.66856 4.68643L6.84189 2.33977C7.48189 1.06643 8.52189 1.06643 9.15523 2.33977Z"
+            fill="#F8CE0B"
+            stroke="#F8CE0B"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
       </div>
-      <NuxtImg :src="image" alt="product image" width="140" class="mx-auto" />
-      <p class="text-gray-700 text-xl">{{ name }}</p>
+    </div>
+    <div class="flex flex-col flex-1">
+      <NuxtImg
+        :src="image"
+        alt="product image"
+        width="140"
+        class="mx-auto select-none"
+      />
+      <NuxtLink :to="`/products/${slug}`" class="text-gray-700 text-xl">{{
+        name
+      }}</NuxtLink>
       <div class="mt-auto">
         <div class="flex justify-end text-xl pt-2">
           <div class="flex gap-2 items-center text-gray-900">
@@ -34,7 +41,7 @@
         </div>
 
         <!-- Button Section -->
-        <div class="flex pb-3 pt-1 gap-1 mt-1">
+        <div class="flex pb-3 pt-1 gap-1 mt-auto">
           <MyButton
             :color="`bg-${themeColor}-400`"
             class="basis-3/5 gap-2 text-white"
@@ -51,8 +58,8 @@
           </MyButton>
         </div>
       </div>
-    </template>
-  </Card>
+    </div>
+  </MyCard>
 </template>
 
 <script setup lang="ts">
@@ -64,6 +71,7 @@ const { themeColor, ...props } = defineProps<{
   price: string;
   off_price: string;
   themeColor?: string;
+  slug?: string;
 }>();
 </script>
 
