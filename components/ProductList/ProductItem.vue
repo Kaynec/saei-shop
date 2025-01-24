@@ -45,7 +45,6 @@
           <MyButton
             :color="`bg-${themeColor}-400`"
             class="basis-3/5 gap-2 text-white"
-            unstyled
           >
             <Icon name="mdi:basket-outline" class="text-xl" />
             <span>افزودن به سبد</span>

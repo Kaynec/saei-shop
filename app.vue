@@ -8,14 +8,14 @@
     <div class="flex min-h-[100svh] flex-col max-w-full text-gray-900">
       <LoginSignup />
       <Header />
-      <NuxtPage />
+      <!-- <NuxtPage /> -->
 
-      <!-- <NuxtErrorBoundary>
+      <NuxtErrorBoundary>
         <NuxtPage />
         <template #error="{ error }">
           <p>An error occurred: {{ error }}</p>
         </template>
-      </NuxtErrorBoundary> -->
+      </NuxtErrorBoundary>
       <Footer />
     </div>
   </NuxtLayout>

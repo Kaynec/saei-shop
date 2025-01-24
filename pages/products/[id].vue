@@ -1,23 +1,41 @@
 <template>
-  <div class="my-3rem" v-if="data">
+  <div class="my-[1rem] md:my-[2rem] lg:my-[3rem] space-y-4 px-4" v-if="data">
     <!-- Desktop Version: 60% Product Details, 40% Product Guaranty -->
-    <div class="hidden md:grid">
-      <div class="col-12 md:col-9">
-        <ProductDetails :data="data" />
+    <ProductDetails :data="data" />
+    <MyCard
+      class="grid grid-cols-4 p-0 gap-2 bg-transparent md:bg-white !md:py-2"
+    >
+      <div
+        class="col-span-full rounded-xl md:col-span-1 bg-white md:bg-transparent flex gap-1 items-center"
+      >
+        <img src="/home/badge.png" alt="badge category picture" width="100" />
+        <span>ضمانت اصالت کالا</span>
       </div>
-      <!-- <div class="col-12 md:col-3">
-        <LazyProductGaranty :data="data" />
-      </div> -->
-    </div>
+      <div
+        class="col-span-full rounded-xl md:col-span-1 bg-white md:bg-transparent flex gap-1 items-center"
+      >
+        <img src="/home/truck.png" alt="truck category picture" width="100" />
 
-    <!-- Mobile Version: Combined Product Details and Guaranty -->
-    <!-- <LazyProductDetailsMobile :data="data" class="block md:hidden" /> -->
+        <span>ارسال به سراسر کشور</span>
+      </div>
+      <div
+        class="col-span-full rounded-xl md:col-span-1 bg-white md:bg-transparent flex gap-1 items-center"
+      >
+        <img src="/home/cart.png" alt="cart category picture" width="100" />
 
-    <!-- Tabs -->
-    <!-- <LazyProductTabs :data="data" /> -->
-
-    <!-- Related Products -->
-    <!-- <RelatedProducts v-if="data" :data="data" /> -->
+        <span>ضمانت اصالت کالا</span>
+      </div>
+      <div
+        class="col-span-full rounded-xl md:col-span-1 bg-white md:bg-transparent flex gap-1 items-center"
+      >
+        <img
+          src="/home/headphone.png"
+          alt="headphone category picture"
+          width="100"
+        />
+        <span>مشاوره رایگان خرید</span>
+      </div>
+    </MyCard>
   </div>
 </template>
 <script setup lang="ts">
