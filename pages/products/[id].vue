@@ -36,6 +36,14 @@
         <span>مشاوره رایگان خرید</span>
       </div>
     </MyCard>
+    <ProductDescription />
+    <!--  -->
+    <ProductList
+      v-bind="redCarouselData"
+      variant="bordered"
+      theme-color="red"
+    />
+    <!--  -->
   </div>
 </template>
 <script setup lang="ts">
@@ -44,6 +52,7 @@ import {
   type ProductDetailOutPut,
 } from "@/api";
 import type { Review } from "@/types";
+import ProductDescription from "~/components/Product/ProductDescription.vue";
 
 const router = useRouter();
 
@@ -56,6 +65,14 @@ const { data } = await useAsyncData(`product-${id}`, async () => {
     throw error;
   }
 });
+
+const redCarouselData = {
+  headerImage: "/pencil.png",
+  headerText: "کتاب و لوازم التحریر",
+  themeColor: "red",
+  showNuxtImg: true,
+  nuxtImgUrl: "/child.png",
+};
 
 // Defining Page Schema After The Blog Data is Fetched
 useSchemaOrg([

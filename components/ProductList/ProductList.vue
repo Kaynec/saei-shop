@@ -21,7 +21,7 @@ const carouselItems = Array.from({ length: 50 }, (_, i) => i); // Dummy data for
 const MyComponent = () => {
   return (
     <div class="items-center gap-2 justify-center flex mt-4 ">
-      <ViewAllBtn class={["w-max !px-6", `bg-${themeColor}-400`]} />
+      <ViewAllBtn class={["w-max text-white px-6", `bg-${themeColor}-400`]} />
       <MyCarouselNext themeColor={themeColor} />
       <MyCarouselPrevious themeColor={themeColor} />
     </div>

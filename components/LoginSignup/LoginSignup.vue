@@ -33,8 +33,8 @@
                       class="flex-1"
                       :class="
                         tabValue !== 'signup'
-                          ? '!text-black border-[2px] border-grey-50'
-                          : ''
+                          ? 'text-black border-[2px] border-grey-50'
+                          : 'text-white'
                       "
                       :color="
                         tabValue == 'signup'
@@ -50,8 +50,8 @@
                       class="flex-1"
                       :class="
                         tabValue !== 'login'
-                          ? '!text-black border-[2px] border-grey-50'
-                          : ''
+                          ? 'text-black border-[2px] border-grey-50'
+                          : 'text-white'
                       "
                       :color="
                         tabValue == 'login' ? 'bg-yellow-600' : 'bg-transparent'

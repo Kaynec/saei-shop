@@ -47,8 +47,6 @@
 </template>
 
 <script setup lang="ts">
-import Login from "~/components/Login/Login.vue";
-
 const redCarouselData = {
   headerImage: "/pencil.png",
   headerText: "کتاب و لوازم التحریر",

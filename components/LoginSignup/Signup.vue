@@ -8,7 +8,9 @@
       </IftaLabel>
       <PasswordInput v-model="password" />
     </div>
-    <MyButton color="bg-orange-400 w-full"> ثبت نام </MyButton>
+    <MyButton color="bg-orange-400" class="w-full text-white">
+      ثبت نام
+    </MyButton>
     <p>ورود شما به معنای پذیرش شرایط کلین ابزار و قوانین حریم‌ خصوصی است .</p>
   </div>
 </template>
