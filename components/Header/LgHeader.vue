@@ -37,12 +37,16 @@
         <li class="border-l-2 border-solid border-grey-50 pe-2">
           <MyMegaMenu />
         </li>
-        <li class="border-l-2 border-solid border-grey-50 pe-2">مقالات</li>
-        <li class="border-l-2 border-solid border-grey-50 pe-2">
-          سوالات متداول
+
+        <li
+          v-for="link in Object.keys(Links)"
+          :key="link"
+          class="border-l-2 border-solid border-grey-50 pe-2"
+        >
+          <NuxtLink :to="(Links as any)[link]" class="text-sm text-grey-400">{{
+            link
+          }}</NuxtLink>
         </li>
-        <li class="border-l-2 border-solid border-grey-50 pe-2">درباره ما</li>
-        <li>تماس با ما</li>
       </ul>
       <div class="flex gap-2">
         <span> ۰۲۱ - ۷۷۹۸۹۸00 </span>
@@ -53,6 +57,7 @@
 </template>
 
 <script setup lang="ts">
+import { Links } from "~/const/SiteDetails";
 import { useGlobalState } from "~/store/global";
 
 onMounted(() => {

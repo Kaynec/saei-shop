@@ -73,3 +73,6 @@ body {
 .p-dataview-content {
   background: transparent;
 }
+:root {
+  --p-datatable-column-title-font-weight: 400;
+}

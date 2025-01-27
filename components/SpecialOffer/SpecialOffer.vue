@@ -16,6 +16,7 @@
           </div>
           <div
             class="transform top-1/2 bottom-1/2 -translate-y-1/2 absolute z-50 border-r-orange-600 -right-4"
+            c
           >
             <MyCarouselNext />
           </div>

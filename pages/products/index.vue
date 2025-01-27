@@ -302,6 +302,10 @@ const {
 });
 
 onMounted(() => {
+  if (!data.value) {
+    return;
+  }
+  console.log("DATA", data.value);
   limit.value = data.value.limit;
   max.value = Math.ceil(data.value.count / limit.value);
   count.value = data.value.count;
