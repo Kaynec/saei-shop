@@ -47,6 +47,8 @@ export default defineNuxtConfig({
     },
   },
 
+  // css: ["@majidh1/dist/jalalidatepicker.min.css"],
+
   tailwindcss: {
     cssPath: "~/styles/index.css",
   },

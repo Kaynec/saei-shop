@@ -53,6 +53,9 @@
 
 <script setup lang="ts">
 import Discount from "~/components/Dashboard/Discount.vue";
+import Favourite from "~/components/Dashboard/Favourite.vue";
+import Orders from "~/components/Dashboard/Orders.vue";
+import ProfileDetail from "~/components/Dashboard/ProfileDetail.vue";
 
 const tabs = [
   {
@@ -64,16 +67,19 @@ const tabs = [
     tabname: "سفارشات",
     tab: "orders",
     icon: "mdi-basket-outline",
+    component: Orders,
   },
   {
     tabname: "اطلاعات شخصی",
     tab: "profile-info",
     icon: "mdi-account-outline",
+    component: ProfileDetail,
   },
   {
     tabname: "علاقه مندی ها",
-    tab: "favorite",
+    tab: "Favourite",
     icon: "mdi-heart-outline",
+    component: Favourite,
   },
   {
     tabname: "آدرس ها",

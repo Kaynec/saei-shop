@@ -50,7 +50,11 @@
             <span>افزودن به سبد</span>
           </MyButton>
           <MyButton class="basis-1/5" color="bg-gray-200">
-            <Icon name="mdi:heart-outline" class="text-gray-600 text-lg" />
+            <Icon
+              :name="hearted ? 'mdi:heart' : 'mdi:heart-outline'"
+              :class="hearted ? 'text-[#ED5254] ' : 'text-gray-600'"
+              class="text-lg"
+            />
           </MyButton>
           <MyButton class="basis-1/5" color="bg-gray-200">
             <Icon name="mdi:basket-outline" class="text-gray-600 text-lg" />
@@ -71,6 +75,7 @@ const { themeColor, ...props } = defineProps<{
   off_price: string;
   themeColor?: string;
   slug?: string;
+  hearted?: boolean;
 }>();
 </script>
 

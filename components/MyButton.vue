@@ -5,8 +5,6 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, computed } from "vue";
-
 // Define props interface
 interface MyButtonProps {
   color?: string;
