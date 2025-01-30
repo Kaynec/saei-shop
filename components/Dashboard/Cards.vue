@@ -75,84 +75,213 @@
           <p class="text-lg">افزودن حساب بانکی جدید</p>
         </div>
       </template>
+
+      <Transition
+        enter-active-class="transform duration-500 ease-out"
+        enter-from-class="translate-x-[200%]"
+        enter-to-class="translate-x-[100%]"
+        leave-active-class="transform duration-500 ease-in"
+        leave-from-class="translate-x-[200%]"
+        leave-to-class="translate-x-[100%]"
+      >
+        <div class="flex-flex-col-gap-4" v-if="currentStep == STEPS.STEP1">
+          <p class="py-4 text-sm text-grey-300 font-semibold">
+            برای محاسبه شبا، شماره کارت متصل به حسابی که می‌خواهید واریز وجه به
+            آن انجام شود را وارد کنید
+          </p>
+          <FormField name="depositNumber" class="w-full">
+            <InputText
+              v-model="model.depositNumber"
+              class="my-input py-2"
+              variant="outlined"
+              name="depositNumber"
+              fuild
+            />
+          </FormField>
+          <div class="col-span-full flex gap-2">
+            <MyButton
+              @click="currentStep = STEPS.STEP2"
+              type="submit"
+              class="text-white flex-1 !max-w-56 mt-4"
+              color="bg-orange-400"
+            >
+              محاسبه شماره شبا
+            </MyButton>
+          </div>
+        </div>
+        <div class="flex-flex-col-gap-4" v-else>
+          <p class="py-4 text-sm text-grey-300 font-semibold">
+            کد ۵ رقمی به شماره‌ی ۰۹۳۰۲۶۰۸۵۳۸ ارسال گردید
+          </p>
+          <FormField name="otp" class="w-full">
+            <IftaLabel :initialValue="model.otp">
+              <InputText
+                v-model="model.otp"
+                class="my-input"
+                variant="outlined"
+                name="otp"
+              />
+              <label> کد تایید احراز هویت</label>
+            </IftaLabel>
+            <button class="text-primary-500 pt-4 text-center w-full">
+              01:59 مانده تا دریافت مجدد کد
+            </button>
+          </FormField>
+          <div class="col-span-full flex gap-2">
+            <MyButton
+              @click="submitOtp"
+              type="submit"
+              class="text-white flex-1 !max-w-56"
+              color="bg-orange-400"
+            >
+              تایید
+            </MyButton>
+          </div>
+        </div>
+      </Transition>
     </Dialog>
 
     <div
-      class="flex flex-col min-h-[min(65svh,36rem)] overflow-auto overscroll-contain"
+      class="grid grid-cols-auto-fit-350 gap-4 min-h-[min(65svh,36rem)] overflow-auto overscroll-contain"
     >
       <div
         v-for="(item, index) in cards"
         :key="index"
-        class="flex flex-col gap-2 border-[1px] border-solid border-grey-50 p-4 rounded-lg"
+        class="max-h-48 flex flex-col relative items-start text-lg gap-2 p-4 rounded-lg bg-grey-50"
       >
-        <div
-          class="flex flex-col md:flex-row gap-2 md:items-center justify-between"
-        >
-          <span>
-            {{ item.address_detail.split(",")[0] }}
-          </span>
-          <div class="flex gap-2 items-center">
-            <MyButton color="bg-grey-50" class="bg-opacity-30 px-4">
-              انتخاب به عنوان پیشفرض
-              <Icon name="mdi-star" class="text-xl text-yellow-400" />
-            </MyButton>
-            <MyButton color="bg-grey-50" class="bg-opacity-30 px-4">
-              حذف آدرس
-              <Icon
-                name="mdi-trash-can-outline"
-                class="text-xl text-grey-200"
-              />
-            </MyButton>
-          </div>
+        <div class="absolute left-0 top-0 m-4">
+          <button @click="toggle($event, index)">
+            <Icon
+              name="mdi-dots-vertical"
+              class="text-xl absolute left-0 top-0 m-4"
+            />
+          </button>
+          <Popover ref="op">
+            <div class="flex justify-center gap-4 w-[25rem]">
+              <div class="flex items-center gap-4">
+                <span class="font-medium block">حدف حساب</span>
+                <MyButton
+                  @click="
+                    cards = cards.filter((card) => card.iban !== item.iban)
+                  "
+                  color="bg-grey-50"
+                  class="bg-opacity-30 px-4"
+                >
+                  <Icon
+                    name="mdi-trash-can-outline"
+                    class="text-xl text-grey-200"
+                  />
+                </MyButton>
+              </div>
+              <!-- <div class="flex gap-4 items-center">
+                <span class="font-medium block mb-2">ویرایش حساب</span>
+                <MyButton color="bg-grey-50" class="bg-opacity-30 px-4">
+                  <Icon
+                    name="mdi-trash-can-outline"
+                    class="text-xl text-grey-200"
+                  />
+                </MyButton>
+              </div> -->
+            </div>
+          </Popover>
         </div>
-        <Divider />
-        <div
-          class="flex justify-between flex-col md:flex-row gap-4 md:items-center"
-        >
-          <div class="space-y-4">
-            <p>آدرس : {{ item.address_detail }}</p>
-            <p>نشانی پستی : {{ item.postal_code }}</p>
-          </div>
 
-          <div class="relative w-full aspect-video md:w-64">
-            <LMap
-              ref="map"
-              class="rounded-lg !border-2 !border-solid !border-grey-100"
-              :zoom="16"
-              :center="[item.position.lat, item.position.lng]"
-            >
-              <LTileLayer :url="tileProvider.url" />
-            </LMap>
+        <div class="flex items-center justify-center">
+          <NuxtImg src="/bank-iran/sepah.png" alt="bank sepah" width="100" />
+          <div class="text-lg">
+            <p class="font-semibold">
+              {{ item.depositDescription }}
+            </p>
+            <p>
+              {{ item.depositNumber }}
+            </p>
           </div>
         </div>
+        <p class="text-center w-full tracking-widest">
+          {{ item.iban }}
+        </p>
       </div>
       <Button
         @click="visible = true"
-        class="my-auto w-full border-grey-100 min-h-40 bg-grey-50 bg-opacity-50 text-grey-800 border-2 border-dashed rounded-lg"
+        class="max-h-48 border-grey-100 h-48 bg-grey-50 bg-opacity-50 text-grey-800 border-2 border-dashed rounded-lg"
       >
         <Icon name="mdi-plus" class="text-xl text-grey-200" />
-        افزودن آدرس جدید
+        افزودن حساب بانکی جدید
       </Button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { AddressModel } from "~/api";
-import { tileProvider, zoom } from "~/const/map";
 import type { Card } from "~/types";
 
-const cards = ref<Card[]>([]);
+const cards = ref<Card[]>([
+  {
+    depositDescription: "خماري ازبک",
+    depositNumber: "535302200802",
+    iban: "IR310150000000535302200802",
+  },
+  {
+    depositDescription: "خماري ازبک",
+    depositNumber: "535302200802",
+    iban: "IR310150000000535302200802",
+  },
+  {
+    depositDescription: "خماري ازبک",
+    depositNumber: "535302200802",
+    iban: "IR310150000000535302200802",
+  },
+  {
+    depositDescription: "خماري ازبک",
+    depositNumber: "535302200802",
+    iban: "IR310150000000535302200802",
+  },
+  {
+    depositDescription: "خماري ازبک",
+    depositNumber: "535302200802",
+    iban: "IR310150000000535302200802",
+  },
+]);
 
 const visible = ref(false);
 
-const model = ref<Card>({
+const model = ref<Card & { otp: string }>({
   depositDescription: "",
   depositNumber: "",
   iban: "",
+  otp: "",
 });
 
 function submit(data: Card) {}
+
+const STEPS = {
+  STEP1: "OTP",
+  STEP2: "SUBMIT",
+};
+
+const currentStep = ref(STEPS.STEP1);
+
+async function submitOtp() {
+  // for now just send the data to the mock and assume otp is okay
+  // later we will have a real otp verification
+  try {
+    const res = await $fetch(
+      "/api/shaba?cardNumber=" + model.value.depositNumber
+    );
+    console.log(res);
+    cards.value.push(res as Card);
+    visible.value = false;
+  } catch (error) {
+    console.warn("xo xo");
+  }
+}
+
+const op = ref();
+
+const toggle = (event, index: number) => {
+  console.log(op.value[index]);
+  op.value[index].toggle(event);
+};
 </script>
 
 <style scoped></style>
