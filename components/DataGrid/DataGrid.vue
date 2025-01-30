@@ -15,8 +15,12 @@
         </slot>
       </div>
     </template>
-    <div v-else class="flex-1 flex h-full w-full flex-center text-lg">
-      <p>محصولاتی یافت نشد</p>
+    <div v-else class="text-lg flex-col gap-4 flex-center py-4">
+      <slot name="empty">
+        <div class="flex-1 flex h-full w-full flex-center">
+          <p>محصولاتی یافت نشد</p>
+        </div>
+      </slot>
     </div>
 
     <MyPaginator
@@ -28,6 +32,7 @@
       :nextPageCallback="nextPageCallback"
       :lastPageCallback="lastPageCallback"
       :firstPageCallback="firstPageCallback"
+      v-show="items.length"
     />
   </section>
 </template>

@@ -52,6 +52,8 @@
 </template>
 
 <script setup lang="ts">
+import Address from "~/components/Dashboard/Address.vue";
+import Cards from "~/components/Dashboard/Cards.vue";
 import Discount from "~/components/Dashboard/Discount.vue";
 import Favourite from "~/components/Dashboard/Favourite.vue";
 import Orders from "~/components/Dashboard/Orders.vue";
@@ -85,11 +87,13 @@ const tabs = [
     tabname: "آدرس ها",
     tab: "address",
     icon: "mdi-map-marker-outline",
+    component: Address,
   },
   {
     tabname: "حساب های بانکی",
     tab: "bank-accounts",
     icon: "mdi-bank-outline",
+    component: Cards,
   },
   {
     tabname: "کد تخفیف",
@@ -115,4 +119,19 @@ function changeTab(tab: string) {
 function logout() {
   // some evil code
 }
+
+onMounted(async () => {
+  const body = await $fetch("/api/shaba?cardNumber=5892101086989080");
+  console.log(body);
+
+  //   depositDescription
+  // :
+  // "خماري ازبک"
+  // depositNumber
+  // :
+  // "535302200802"
+  // iban
+  // :
+  // "IR310150000000535302200802"
+});
 </script>

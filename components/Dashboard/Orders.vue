@@ -20,7 +20,7 @@
       <TabPanels>
         <TabPanel v-for="tab in allTabs" :key="tab.value" :value="tab.value">
           <div
-            class="flex flex-col gap-4 max-h-[50svh] overscroll-contain overflow-auto my-2"
+            class="flex flex-col gap-4 max-h-[min(60svh,32rem)] overscroll-contain overflow-auto my-2"
           >
             <div
               class="p-4 border-[1px] border-grey-50 rounded-lg border-solid"

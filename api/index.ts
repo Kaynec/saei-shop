@@ -4,6 +4,7 @@
  * CheatsGame Project
  * OpenAPI spec version: 1.0.0 (v1)
  */
+import type { Position } from "~/types";
 import { customInstance } from "./mutator";
 
 // https://stackoverflow.com/questions/49579094/typescript-conditional-types-filter-out-readonly-properties-pick-only-requir/49579497#49579497
@@ -2540,6 +2541,18 @@ export interface AddressInPut {
   province: string;
 }
 
+export interface AddressModel {
+  /** @maxLength 400 */
+  address_detail: string;
+  /** @maxLength 200 */
+  city: number;
+  /** @maxLength 15 */
+  postal_code: string;
+  /** @maxLength 100 */
+  province: number;
+  position: Position;
+}
+
 export interface AddressDetailOutPut {
   /** @maxLength 400 */
   address_detail: string;
@@ -2557,11 +2570,11 @@ export interface AddressDetailInPut {
   /** @maxLength 400 */
   address_detail: string;
   /** @maxLength 200 */
-  city: string;
+  city: string | number;
   /** @maxLength 15 */
   postal_code: string;
   /** @maxLength 100 */
-  province: string;
+  province: string | number;
 }
 
 export interface AddToCartOutPut {

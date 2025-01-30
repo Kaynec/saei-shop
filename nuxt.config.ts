@@ -71,6 +71,7 @@ export default defineNuxtConfig({
     "@nuxtjs/mdc",
     "@nuxtjs/seo",
     "@pinia/nuxt",
+    "@nuxtjs/leaflet",
   ],
 
   icon: {

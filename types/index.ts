@@ -219,3 +219,45 @@ export interface Attachment {
   selected: boolean;
 }
 export type TagOutPutWithSelected = { selected: boolean } & TagListOutPut;
+export type Position = {
+  lat: number;
+  lng: number;
+};
+export interface ApiAddress {
+  place_id: number;
+  licence: string;
+  osm_type: string;
+  osm_id: number;
+  lat: string;
+  lon: string;
+  class: string;
+  type: string;
+  place_rank: number;
+  importance: number;
+  addresstype: string;
+  name: string;
+  display_name: string;
+  address: Address;
+  boundingbox?: string[] | null;
+}
+export interface Address {
+  road: string;
+  neighbourhood: string;
+  suburb: string;
+  city: string;
+  state: string;
+  district: string;
+  county: string;
+  province: string;
+  "ISO3166-2-lvl4": string;
+  postcode: string;
+  country: string;
+  town: string;
+  country_code: string;
+}
+
+export type Card = {
+  depositDescription: string;
+  depositNumber: string;
+  iban: string;
+};
