@@ -32,18 +32,25 @@
       </div>
     </MyCard>
 
-    <MyCard class="flex-1">
-      <div class="">
-        <div class="flex items-center max-h-10 gap-2">
-          <div class="text bg-grey-50 shadow-lg rounded w-9 h-9 flex-center">
-            <Icon
-              :name="tabs.find(tab=>tab.tab == currentTab)?.icon!"
-              class="text-2xl text-grey-400"
-            />
+    <MyCard
+      :class="
+        currentTab === 'tickets' ? '!bg-transparent !shadow-none !p-0 !m-0' : ''
+      "
+      class="flex-1"
+    >
+      <div>
+        <template v-if="currentTab !== 'tickets'">
+          <div class="flex items-center max-h-10 gap-2">
+            <div class="text bg-grey-50 shadow-lg rounded w-9 h-9 flex-center">
+              <Icon
+                :name="tabs.find(tab=>tab.tab == currentTab)?.icon!"
+                class="text-2xl text-grey-400"
+              />
+            </div>
+            {{ tabs.find((tab) => tab.tab == currentTab)?.tabname! }}
           </div>
-          {{ tabs.find((tab) => tab.tab == currentTab)?.tabname! }}
-        </div>
-        <Divider />
+          <Divider />
+        </template>
 
         <component :is="tabs.find(tab=>tab.tab == currentTab)?.component!" />
       </div>
@@ -52,12 +59,14 @@
 </template>
 
 <script setup lang="ts">
+import { current } from "tailwindcss/colors";
 import Address from "~/components/Dashboard/Address.vue";
 import Cards from "~/components/Dashboard/Cards.vue";
 import Discount from "~/components/Dashboard/Discount.vue";
 import Favourite from "~/components/Dashboard/Favourite.vue";
 import Orders from "~/components/Dashboard/Orders.vue";
 import ProfileDetail from "~/components/Dashboard/ProfileDetail.vue";
+import Ticket from "~/components/Dashboard/Ticket/Ticket.vue";
 
 const tabs = [
   {
@@ -96,6 +105,12 @@ const tabs = [
     component: Cards,
   },
   {
+    tabname: "تیکت ها",
+    tab: "tickets",
+    icon: "mdi-message-outline",
+    component: Ticket,
+  },
+  {
     tabname: "کد تخفیف",
     tab: "discount-codes",
     component: Discount,
@@ -115,23 +130,4 @@ function changeTab(tab: string) {
   activeTab.value = tab;
   currentTab.value = tab;
 }
-
-function logout() {
-  // some evil code
-}
-
-onMounted(async () => {
-  const body = await $fetch("/api/shaba?cardNumber=5892101086989080");
-  console.log(body);
-
-  //   depositDescription
-  // :
-  // "خماري ازبک"
-  // depositNumber
-  // :
-  // "535302200802"
-  // iban
-  // :
-  // "IR310150000000535302200802"
-});
 </script>

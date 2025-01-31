@@ -217,27 +217,27 @@ import type { Card } from "~/types";
 
 const cards = ref<Card[]>([
   {
-    depositDescription: "خماري ازبک",
+    depositDescription: "علیرضا ازبک",
     depositNumber: "535302200802",
     iban: "IR310150000000535302200802",
   },
   {
-    depositDescription: "خماري ازبک",
+    depositDescription: "علیرضا ازبک",
     depositNumber: "535302200802",
     iban: "IR310150000000535302200802",
   },
   {
-    depositDescription: "خماري ازبک",
+    depositDescription: "علیرضا ازبک",
     depositNumber: "535302200802",
     iban: "IR310150000000535302200802",
   },
   {
-    depositDescription: "خماري ازبک",
+    depositDescription: "علیرضا ازبک",
     depositNumber: "535302200802",
     iban: "IR310150000000535302200802",
   },
   {
-    depositDescription: "خماري ازبک",
+    depositDescription: "علیرضا ازبک",
     depositNumber: "535302200802",
     iban: "IR310150000000535302200802",
   },
