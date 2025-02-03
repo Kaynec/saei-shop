@@ -59,7 +59,6 @@
 </template>
 
 <script setup lang="ts">
-import { current } from "tailwindcss/colors";
 import Address from "~/components/Dashboard/Address.vue";
 import Cards from "~/components/Dashboard/Cards.vue";
 import Discount from "~/components/Dashboard/Discount.vue";
