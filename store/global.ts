@@ -11,8 +11,13 @@ export const useGlobalState = createGlobalState(() => {
     loginDialog.value = !loginDialog.value;
   }
 
+  const activeStep = useCookie<number>("activeStep", {
+    default: () => 1,
+  });
+
   return {
     getLoginDialog,
     toggleLoginDialog,
+    activeStep,
   };
 });

@@ -1,4 +1,9 @@
-import type { CategoryOutPut, ProudctOutPut, TagListOutPut } from "@/api";
+import type {
+  AddressModel,
+  CategoryOutPut,
+  ProudctOutPut,
+  TagListOutPut,
+} from "@/api";
 
 export type FilterConditions = {
   All: string;
@@ -261,3 +266,5 @@ export type Card = {
   depositNumber: string;
   iban: string;
 };
+
+export type AddressModelWithSelected = AddressModel & { selected: boolean };

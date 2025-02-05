@@ -127,3 +127,6 @@ jdp-container {
     margin: 0.5rem 0 !important;
   }
 }
+body {
+  letter-spacing: -0.5px;
+}

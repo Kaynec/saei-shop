@@ -1,7 +1,5 @@
 <template>
-  <MyCard
-    class="!shadow-0 !border-none flex flex-col-reverse lg:flex-row gap-4 min-h-[60vh]"
-  >
+  <MyCard class="!shadow-0 !border-none flex flex-col lg:flex-row gap-4">
     <!-- Heading And Right Side -->
     <div class="flex-1">
       <div class="flex flex-1 flex-col gap-4">
@@ -45,229 +43,24 @@
       </div>
     </div>
     <!-- Left Side -->
-    <MyCard
-      class="basis-1/4 !p-4 !bg-bgColor !bg-opacity-60 max-h-max !py-6 flex flex-col"
-    >
-      <div class="justify-between flex py-8">
-        <span> تعداد محصولات : </span>
-        <span class="font-semibold"> {{ quantityCount }} عدد </span>
-      </div>
-      <div class="justify-between flex">
-        <span> قیمت نهایی محصولات : </span>
-        <span class="flex-center gap-2 font-semibold">
-          {{ fullPrice }}
-          <img src="/Tooman.svg" alt="Tooman.svg" />
-        </span>
-      </div>
-
-      <p class="text-center text-xs text-grey-300">
-        مبلغ نهایی سفارش شامل مالیات بر ارزش افزوده است.
-      </p>
-
-      <div class="justify-between flex py-8">
-        <span> هزینه ارسال :</span>
-        <span class="font-semibold flex gap-2">
-          {{ costStuff.total }}
-          <img src="/Tooman.svg" alt="Tooman.svg" />
-        </span>
-      </div>
-
-      <div class="justify-between flex py-8">
-        <span> مجموع تخفیف :</span>
-        <span class="font-semibold flex gap-2">
-          {{ totalDiscount }}
-          <img src="/Tooman.svg" alt="Tooman.svg" />
-        </span>
-      </div>
-
-      <div class="justify-between flex py-8">
-        <span> قیمت نهایی قابل پرداخت :</span>
-        <span class="font-semibold flex gap-2">
-          {{ totalPriceWithDiscount }}
-          <img src="/Tooman.svg" alt="Tooman.svg" />
-        </span>
-      </div>
-      <!--  -->
-      <MyButton color="bg-orange-400 w-full" class="px-4 text-white">
-        ادامه
-      </MyButton>
-    </MyCard>
+    <PriceInfo />
   </MyCard>
 </template>
 
 <script setup lang="ts">
-import { SiteDetails } from "~/const/SiteDetails";
 import InPerson from "./PaymentOptions/InPerson.vue";
 import Bike from "./PaymentOptions/Bike.vue";
 import Postal from "./PaymentOptions/Postal.vue";
-
-const products = ref([
-  {
-    id: 1,
-    name: "کتاب راز",
-    price: 122000,
-    off_price: 112000,
-    discount_end_time: "2025-01-25T15:30:00Z",
-    image:
-      "https://storage.iran.liara.space/cheatsgame-storage/product_images/wd-_ssd-1tr-back.png",
-    description:
-      "کتاب راز با توضیحات و نکات برای اندازه های مختلف در زمینه ی کاری و سرمایه های مختلف است. به شما امکان دارد که با آن یک روش خوب و مناسب برای ساخت یک پروژه ای شوید.",
-    category: "کتاب های راز",
-    discount: "تا 25% تخفیف از قیمت نهایی برای هر کتاب راز در سال ۲۵۵۴ میباشد.",
-    rating: 4.5,
-    stock: 10,
-    on_sale: true,
-    quantity: 2,
-    vendor: "سازمان کتاب های راز",
-    created_at: "2023-01-25T15:30:00Z",
-    updated_at: "2023-01-25T15:30:00Z",
-  },
-  {
-    id: 2,
-    name: "کتاب موفقیت",
-    price: 129000,
-    off_price: 122000,
-
-    discount_end_time: "2025-02-15T10:00:00Z",
-    image:
-      "https://storage.iran.liara.space/cheatsgame-storage/product_images/wd-_ssd-1tr-back.png",
-    description:
-      "کتاب موفقیت با راهکارهای عملی برای دستیابی به اهداف شخصی و حرفه‌ای. مناسب برای افرادی که به دنبال پیشرفت در زندگی هستند.",
-    category: "کتاب های موفقیت",
-    discount: "تا 20% تخفیف برای خریدهای بالای 100 هزار تومان.",
-    rating: 4.7,
-    stock: 15,
-    on_sale: true,
-    quantity: 1,
-    vendor: "انتشارات موفقیت",
-    created_at: "2023-02-10T12:00:00Z",
-    updated_at: "2023-02-10T12:00:00Z",
-  },
-  {
-    id: 3,
-    name: "کتاب مدیریت زمان",
-    price: 162000,
-    off_price: 155000,
-
-    discount_end_time: "2025-03-10T18:00:00Z",
-    image:
-      "https://storage.iran.liara.space/cheatsgame-storage/product_images/wd-_ssd-1tr-back.png",
-    description:
-      "کتاب مدیریت زمان با تکنیک‌های موثر برای برنامه‌ریزی و استفاده بهینه از زمان. مناسب برای دانشجویان و کارمندان.",
-    category: "کتاب های مدیریت",
-    discount: "تا 15% تخفیف برای خریدهای بالای 50 هزار تومان.",
-    rating: 4.3,
-    stock: 20,
-    on_sale: true,
-    quantity: 3,
-    vendor: "انتشارات زمان",
-    created_at: "2023-03-05T09:00:00Z",
-    updated_at: "2023-03-05T09:00:00Z",
-  },
-  {
-    id: 4,
-    name: "کتاب روانشناسی",
-    price: 210000,
-    off_price: 180000,
-
-    discount_end_time: "2025-04-20T14:00:00Z",
-    image:
-      "https://storage.iran.liara.space/cheatsgame-storage/product_images/wd-_ssd-1tr-back.png",
-    description:
-      "کتاب روانشناسی با بررسی عمیق رفتارهای انسانی و راهکارهای بهبود روابط شخصی و اجتماعی.",
-    category: "کتاب های روانشناسی",
-    discount: "تا 30% تخفیف برای خریدهای بالای 150 هزار تومان.",
-    rating: 4.8,
-    stock: 5,
-    on_sale: true,
-    quantity: 1,
-    vendor: "انتشارات روانشناسی",
-    created_at: "2023-04-15T11:00 :00Z",
-    updated_at: "2023-04-15T11 :00 :00Z",
-  },
-  {
-    id: 5,
-    name: "کتاب برنامه‌نویسی",
-    price: 455500,
-    off_price: 420000,
-
-    discount_end_time: "2025 -05 -05 T16 :00 :00 Z",
-    image:
-      "https://storage.iran.liara.space/cheatsgame-storage/product_images/wd-_ssd-1tr-back.png",
-    description:
-      "کتاب برنامه‌نویسی با آموزش گام به گام زبان‌های برنامه‌نویسی مانند Python و JavaScript.",
-    category: "کتاب های فناوری",
-    discount: "تا 10% تخفیف برای خریدهای بالای 200 هزار تومان.",
-    rating: 4.6,
-    stock: 12,
-    on_sale: true,
-    quantity: 2,
-    vendor: "انتشارات فناوری",
-    created_at: "2023 -05 -01 T10 :00 :00 Z",
-    updated_at: "2023 -05 -01 T10 :00 :00 Z",
-  },
-  {
-    id: 6,
-    name: "کتاب آشپزی",
-    price: 650000,
-    off_price: 575632,
-
-    discount_end_time: "2025 -06 -12 T12 :00 :00 Z",
-    image:
-      "https://storage.iran.liara.space/cheatsgame-storage/product_images/wd-_ssd-1tr-back.png",
-    description:
-      "کتاب آشپزی با دستورالعمل‌های ساده و خوشمزه برای تهیه غذاهای ایرانی و بین‌المللی.",
-    category: "کتاب های آشپزی",
-    discount: "تا 25% تخفیف برای خریدهای بالای 70 هزار تومان.",
-    rating: 4.4,
-    stock: 25,
-    on_sale: true,
-    quantity: 4,
-    vendor: "انتشارات آشپزی",
-    created_at: "2023 -06 -10 T08 :00 :00 Z",
-    updated_at: "2023 -06 -10 T08 :00 :00 Z",
-  },
-]);
-
-const quantityCount = computed(() => {
-  return products.value.reduce((acc, item) => {
-    return acc + item.quantity;
-  }, 0);
-});
-
-const fullPrice = computed(() => {
-  return products.value.reduce((acc, item) => {
-    return acc + item.price * item.quantity;
-  }, 0);
-});
-
-const costStuff = ref({
-  total: 17000,
-});
-
-const totalDiscount = computed(() => {
-  return products.value.reduce(
-    (total, item) => (total += item.price - item.off_price),
-    0
-  );
-});
-
-const totalPriceWithDiscount = computed(() => {
-  return products.value.reduce(
-    (total, item) => (total += item.off_price ?? item.price),
-    0
-  );
-});
 
 const currentOption = computed(() => sendOptions.value.find((el) => el.value)!);
 
 const sendOptions = ref([
   {
     name: "تحویل حضوری",
-    component: InPerson,
+    component: markRaw(InPerson),
     description:
       "کاربر گرامی در این روش شما به صورت حضوری بسته خود را از ما دریافت خواهید کرد.",
-    image(fillColor = "red") {
+    image() {
       const fillClr = this.value ? "#FDAF4B" : "#9F9F9F";
       return `<svg width="36" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_84_45921)">
@@ -289,10 +82,10 @@ const sendOptions = ref([
   },
   {
     name: "ارسال با پیک",
-    component: Bike,
+    component: markRaw(Bike),
     description:
       "کاربر گرامی در این روش شما بسته خود را از طریق پیک از ما دریافت خواهید کرد.",
-    image(fillColor = "red") {
+    image() {
       const fillClr = this.value ? "#FDAF4B" : "#9F9F9F";
       return `<svg width="36" height="48" viewBox="0 0 24 24" fill="${fillClr}" xmlns="http://www.w3.org/2000/svg">
 <path d="M23.25 8.625H12.75C12.525 8.625 12.375 8.775 12.375 9V11.5125L11.4375 11.2875L10.425 10.275C11.55 9.225 11.625 7.0125 11.625 6.375C13.0125 6.375 13.9875 6 14.3625 5.325C14.5125 5.025 14.625 4.5375 14.2125 3.9C13.8 3.3 13.275 3 12.5625 3H11.2125C11.1 2.325 10.65 0.9 8.8875 0.4875C8.5125 0.4125 7.9875 0.375 7.875 0.375C3.975 0.375 3.375 2.25 3.375 3.375V5.25C3.375 5.5125 3.4875 5.8125 3.7125 6.0375C3.525 6.2625 3.375 6.6375 3.375 7.125C3.375 8.0625 4.0125 8.475 4.575 8.5875C4.7625 9.15 5.025 9.5625 5.2875 9.9L3.9 11.2875C3.6 11.625 3.975 11.9625 3.975 11.9625L2.3625 13.575C2.2125 13.7625 0.75 15.2625 0.75 16.5C0.75 16.575 0.75 16.6125 0.7875 16.65L2.6625 20.4C2.7 20.5125 2.8125 20.55 2.8875 20.5875C2.925 20.5875 3.2625 20.7 3.75 20.7C3.75 20.7375 3.7125 22.8375 3.7125 22.8375C3.7125 23.0625 3.8625 23.2125 4.0875 23.2125C4.3125 23.2125 4.4625 23.0625 4.4625 22.8375V21.7875C5.025 22.4625 5.925 23.2125 7.0875 23.2125C8.25 23.2125 10.3875 22.4625 12.2625 21.7875C12.6 21.675 12.9 21.5625 13.2 21.45C13.275 21.4125 13.35 21.4125 13.4625 21.375V22.875C13.4625 23.1 13.6125 23.25 13.8375 23.25C14.0625 23.25 14.2125 23.1 14.2125 22.875V21.1875C14.8875 21.0375 15.525 20.9625 16.0875 21H18.7125C19.35 21 20.2125 20.775 20.475 20.1C20.55 19.9125 20.5875 19.725 20.5875 19.5H23.2125C23.4375 19.5 23.5875 19.35 23.5875 19.125V9C23.625 8.775 23.475 8.625 23.25 8.625ZM19.125 9.375V11.4L18.15 10.9125C18.1125 10.875 18.075 10.875 18 10.875C17.925 10.875 17.8875 10.875 17.85 10.9125L16.875 11.4V9.375H19.125ZM8.175 11.4375C8.1375 11.3625 7.95 11.25 7.95 11.25C8.4 11.25 8.775 11.175 9.15 11.0625L9 11.5125L8.625 12.4875C8.625 12.4875 8.2125 11.4375 8.175 11.4375ZM10.0125 10.9125L10.8 11.7L10.425 12.4125L9.7875 11.55L10.0125 10.9125ZM10.6875 3.75C10.35 4.0125 10.05 4.35 9.825 4.65C9.1875 5.5875 8.625 5.625 8.625 5.625H6.6375C6.7875 5.475 6.9375 5.2875 7.05 5.1C7.5 4.425 8.325 3.75 9 3.75H10.6875ZM13.575 4.35C13.7625 4.6125 13.8 4.8375 13.6875 4.9875C13.5375 5.2875 12.9 5.625 11.625 5.625H11.5875C11.5125 4.95 11.4 4.4625 11.325 4.2C11.7375 3.9375 12.15 3.75 12.5625 3.75C12.975 3.75 13.3125 3.9375 13.575 4.35ZM4.125 3.375C4.125 2.025 5.2125 1.4625 6.45 1.2375C5.8125 1.9125 5.625 2.775 5.625 3.375C5.625 3.6 5.775 3.75 6 3.75C6.1875 3.75 6.375 3.6 6.375 3.375C6.375 3.15 6.45 1.35 8.2875 1.1625C9.9 1.3125 10.35 2.4375 10.4625 3H9C7.9875 3 6.975 3.825 6.45 4.65C5.8125 5.5875 5.25 5.625 5.25 5.625H4.5C4.2 5.625 4.125 5.4375 4.125 5.25V3.375ZM4.875 7.875C4.7625 7.875 4.125 7.8375 4.125 7.125C4.125 6.45 4.425 6.375 4.5 6.375H8.625C8.7375 6.375 9.6 6.3375 10.425 5.1C10.5 4.9875 10.575 4.875 10.6875 4.7625C10.7625 5.1 10.875 5.6625 10.875 6.4125C10.875 6.45 11.025 8.5125 9.9375 9.7125C9.45 10.2375 8.7375 10.5 7.875 10.5C7.8375 10.5 5.8875 10.4625 5.25 8.1375C5.175 7.9875 5.025 7.875 4.875 7.875ZM5.6625 10.6125L7.3125 11.7L6.3 12.975L4.65 11.625L5.6625 10.6125ZM1.5 16.425C1.575 15.6375 2.5125 14.5125 2.8875 14.1375L4.5375 12.4875L6.1125 13.8C6.1875 13.875 6.2625 13.875 6.3375 13.875H6.375C6.4875 13.875 6.5625 13.8 6.6375 13.725L7.725 12.3375L8.25 13.6125C8.325 13.7625 8.4375 13.8375 8.5875 13.8375C8.7375 13.8375 8.8875 13.7625 8.925 13.6125L9.4125 12.375L10.125 13.35C10.2 13.4625 10.3125 13.5 10.4625 13.5C10.575 13.5 10.6875 13.425 10.7625 13.3125L11.3625 12.075L12.3 12.3V18.2625C11.7375 18.45 11.0625 18.675 10.35 18.9C9.7875 19.0875 9.225 19.275 8.7 19.4625C8.0625 19.6875 7.3125 19.425 6.975 18.825L5.5125 16.3125C5.4 16.125 5.175 16.0875 4.9875 16.2C4.8 16.3125 4.7625 16.5375 4.875 16.725L5.925 18.45C5.325 20.2125 3.7125 20.0625 3.225 19.95L1.5 16.425ZM19.8 19.8C19.6875 20.1 19.1625 20.25 18.75 20.25H16.1625C14.925 20.175 13.65 20.55 13.0125 20.775C12.7125 20.8875 12.375 21 12.075 21.1125C10.3125 21.7125 8.175 22.5 7.125 22.5C5.8125 22.5 4.875 21.15 4.575 20.6625C5.2125 20.5125 5.925 20.175 6.45 19.275C6.8625 19.9125 7.575 20.2875 8.325 20.2875C8.55 20.2875 8.775 20.25 9 20.175C9.4875 20.025 10.05 19.8375 10.65 19.6125C12.3 19.05 14.325 18.375 14.85 18.375H17.475C17.5875 18.375 17.8125 18.45 17.85 18.75H16.875C16.65 18.75 16.5 18.9 16.5 19.125C16.5 19.35 16.65 19.5 16.875 19.5C16.875 19.5 19.725 19.5375 19.875 19.5375C19.875 19.6125 19.8375 19.725 19.8 19.8ZM22.875 18.75H18.6C18.5625 17.925 17.925 17.625 17.475 17.625H14.85C14.5125 17.625 13.95 17.775 13.125 18V9.375H16.125V12C16.125 12.1125 16.2 12.2625 16.3125 12.3375C16.425 12.4125 16.575 12.4125 16.6875 12.3375L18.0375 11.6625L19.3875 12.3375C19.3875 12.375 19.425 12.375 19.5 12.375C19.575 12.375 19.65 12.375 19.6875 12.3375C19.8 12.2625 19.875 12.15 19.875 12V9.375H22.875V18.75Z" fill="${fillClr}"/>
@@ -304,10 +97,10 @@ const sendOptions = ref([
   },
   {
     name: "ارسال با پست",
-    component: Postal,
+    component: markRaw(Postal),
     description:
       "کاربر گرامی در این روش بسته شما را با پست به آدرس و کد پستی شما ارسال می کنیم.",
-    image(fillColor = "red") {
+    image() {
       const fillClr = this.value ? "#FDAF4B" : "#9F9F9F";
       return `<svg width="36" height="48" viewBox="0 0 24 24" fill="${fillClr}" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_84_45945)">
