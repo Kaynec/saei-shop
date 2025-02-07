@@ -1,5 +1,6 @@
 <template>
   <div>
+    <FitLoadingScreen v-if="loading" />
     <Dialog
       :pt="{
         root: 'p-dialog-maximized',
@@ -45,7 +46,7 @@
     </Dialog>
 
     <div
-      class="flex flex-col min-h-[min(65svh,36rem)] overflow-auto overscroll-contain"
+      class="flex flex-col gap-4 min-h-[min(65svh,36rem)] overflow-auto overscroll-contain"
     >
       <div
         v-for="(item, index) in address"
@@ -56,14 +57,18 @@
           class="flex flex-col md:flex-row gap-2 md:items-center justify-between"
         >
           <span>
-            {{ item.address_detail.split(",")[0] }}
+            {{ item?.address_detail?.split(",")[0] }}
           </span>
           <div class="flex gap-2 items-center">
             <MyButton color="bg-grey-50" class="bg-opacity-30 px-4">
               انتخاب به عنوان پیشفرض
               <Icon name="mdi-star" class="text-xl text-yellow-400" />
             </MyButton>
-            <MyButton color="bg-grey-50" class="bg-opacity-30 px-4">
+            <MyButton
+              color="bg-grey-50"
+              class="bg-opacity-30 px-4"
+              @click="deleteAddress(item)"
+            >
               حذف آدرس
               <Icon
                 name="mdi-trash-can-outline"
@@ -77,20 +82,21 @@
           class="flex justify-between flex-col md:flex-row gap-4 md:items-center"
         >
           <div class="space-y-4">
-            <p>آدرس : {{ item.address_detail }}</p>
-            <p>نشانی پستی : {{ item.postal_code }}</p>
+            <p>آدرس : {{ item?.address_detail }}</p>
+            <p>کد پستی : {{ item?.postal_code }}</p>
           </div>
 
-          <div class="relative w-full aspect-video md:w-64">
+          <!-- <div class="relative w-full aspect-video md:w-64">
             <LMap
               ref="map"
               class="rounded-lg !border-2 !border-solid !border-grey-100"
               :zoom="16"
-              :center="[item.position.lat, item.position.lng]"
+              :use-global-leaflet="false"
+              :center="[item?.position?.lat, item?.position?.lng]"
             >
-              <LTileLayer :url="tileProvider.url" />
+              <LTileLayer :url="tileProvider?.url" />
             </LMap>
-          </div>
+          </div> -->
         </div>
       </div>
       <Button
@@ -105,20 +111,24 @@
 </template>
 
 <script setup lang="ts">
-import type { AddressModel } from "~/api";
-import { tileProvider, zoom } from "~/const/map";
+import type { MyAddressInPut } from "~/types";
+import { tileProvider } from "~/const/map";
+import {
+  apiUserAddressDetailDestroy,
+  apiUserAddressListUserRetrieve,
+  apiUserCreateAddressCreate,
+} from "~/api";
 
-const address = ref<AddressModel[]>([
+const { data: address, status } = useAsyncData(
+  "address",
+  async () =>
+    (await apiUserAddressListUserRetrieve()) as any as MyAddressInPut[],
   {
-    address_detail:
-      "استان تهران , بخش مرکزی شهرستان تهران ,  ایران ,  شهر تهران ,   منطقه ۱۱ شهر تهران , کلانتری , امیریه",
-    city: 291,
-    postal_code:
-      "کلانتری, امیریه, منطقه ۱۱ شهر تهران, شهر تهران, بخش مرکزی شهرستان تهران, شهرستان تهران, استان تهران, 13356-63393, ایران",
-    province: 8,
-    position: { lat: 35.676045, lng: 51.38752 },
-  },
-]);
+    default() {
+      return [] as MyAddressInPut[];
+    },
+  }
+);
 
 const visible = ref(false);
 
@@ -130,25 +140,71 @@ const model = ref({
   position: { lat: 35.676045, lng: 51.38752 },
 });
 
-function submit(data: AddressModel) {
+const loading = ref(false);
+
+const toast = useToast();
+function submit(data: MyAddressInPut) {
   address.value.push(data);
-  // objectToSend.city = (model.value.city as any)?.name ?? model.value.city;
-  // objectToSend.province =
-  //   (model.value.province as any)?.name ?? model.value.province;
 
-  // if (model.value?.id) {
-  //   // Update Address
-  //   apiUserAddressDetailUpdate(model.value.id, objectToSend).finally(() =>
-  //     closeTheDialog()
-  //   );
-
-  //   return;
-  // }
-  // // Create Address
-  // apiUserCreateAddressCreate(objectToSend as AddressInPut).finally(() =>
-  //   closeTheDialog()
-  // );
+  loading.value = true;
+  apiUserCreateAddressCreate({
+    city: data.city,
+    province: data.province,
+    postal_code: data.postal_code,
+    address_detail: data.address_detail,
+  })
+    .then(() => (visible.value = false))
+    .catch((err) => {
+      toast.add({
+        severity: "error",
+        summary: "خطا",
+        detail: err.response.data.error,
+        life: 3000,
+      });
+    })
+    .finally(() => {
+      loading.value = false;
+      model.value.address_detail = "";
+      model.value.city = "";
+      model.value.postal_code = "";
+      model.value.province = "";
+    });
 }
+
+const confirm = useConfirm();
+const deleteAddress = (item: MyAddressInPut) => {
+  confirm.require({
+    message: "آیا از حذف آدرس مطمئن هستید؟",
+    header: "حذف آدرس",
+    rejectProps: {
+      label: "خیر",
+      severity: "secondary",
+      outlined: true,
+    },
+    acceptProps: {
+      label: "بله",
+    },
+    accept: () => {
+      apiUserAddressDetailDestroy(item.id!).finally(() =>
+        refreshNuxtData(["address"])
+      );
+      toast.add({
+        severity: "info",
+        summary: "تایید شد",
+        detail: "آدرس حذف شد",
+        life: 3000,
+      });
+    },
+    reject: () => {
+      toast.add({
+        severity: "error",
+        summary: "تایید نشد",
+        detail: "آدرس حذف نشد",
+        life: 3000,
+      });
+    },
+  });
+};
 </script>
 
 <style scoped></style>

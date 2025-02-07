@@ -1,5 +1,10 @@
 <template>
-  <div class="grid grid-cols-12 gap-4">
+  <Form
+    @submit="submit"
+    ref="form"
+    class="grid grid-cols-12 gap-4"
+    :resolver="addressResolver"
+  >
     <ClientOnly>
       <Dialog
         :pt="{
@@ -15,6 +20,7 @@
             ref="map"
             :zoom="zoom"
             @update:center="centerUpdated"
+            :use-global-leaflet="false"
             :center="[
               userLocation?.lat || model.position.lat,
               userLocation?.lng || model.position.lng,
@@ -31,100 +37,120 @@
             </div>
             <LTileLayer :url="tileProvider.url" />
           </LMap>
+          <MyButton
+            color="bg-primary-600"
+            class="text-white ms-auto mt-4 w-56 !py-4"
+            @click="submitAddressFromApi"
+          >
+            تایید آدرس
+          </MyButton>
         </div>
       </Dialog>
     </ClientOnly>
-    <FormField name="otp" class="w-full col-span-full">
-      <IftaLabel :initialValue="model.postal_code">
-        <InputText
-          v-model="model.postal_code"
-          class="my-input"
-          variant="outlined"
-          name="otp"
-        />
-        <label> نشانی پستی</label>
-      </IftaLabel>
-      <div class="flex justify-between pt-2">
-        <span> آدرس بالا بر اساس موقعیت انتخابی شما وارد شده است. </span>
-        <button @click="visible = true" class="text-primary-500 pt-2">
-          ویرایش موقعیت مکانی روی نقشه
-        </button>
-      </div>
-    </FormField>
-
-    <!--  -->
-    <FormField name="province" class="w-full col-span-6">
-      <IftaLabel :initialValue="model.province">
+    <FormField
+      :initialValue="model.province"
+      name="province"
+      class="w-full col-span-4"
+    >
+      <IftaLabel>
         <Select
-          :options="provinces"
-          option-value="id"
-          option-label="name"
           v-model="model.province"
+          :options="Object.keys(cities)"
           class="my-input"
           variant="outlined"
-          name="province"
         />
         <label> استان</label>
       </IftaLabel>
     </FormField>
 
-    <FormField name="city" class="w-full col-span-6">
-      <IftaLabel :initialValue="model.city">
+    <FormField :initialValue="model.city" name="city" class="w-full col-span-4">
+      <IftaLabel>
         <Select
-          :options="getCities"
-          option-value="id"
-          option-label="name"
           v-model="model.city"
+          :options="getCities"
+          option-value="name"
+          option-label="name"
           class="my-input"
           variant="outlined"
-          name="city"
         >
           <template #empty> لطفا ابتدا استان را انتخاب کنید </template>
         </Select>
         <label> شهر</label>
       </IftaLabel>
     </FormField>
+    <FormField
+      :initialValue="model.postal_code"
+      name="postal_code"
+      class="w-full col-span-4"
+    >
+      <IftaLabel>
+        <InputText
+          v-model="model.postal_code"
+          class="my-input"
+          variant="outlined"
+        />
+        <label> کد پستی</label>
+      </IftaLabel>
+    </FormField>
 
-    <FormField name="city" class="col-span-full">
-      <IftaLabel :initialValue="model.address_detail">
+    <FormField
+      :initialValue="model.address_detail"
+      name="address_detail"
+      class="w-full col-span-full"
+    >
+      <IftaLabel>
         <InputText
           v-model="model.address_detail"
           class="my-input"
           variant="outlined"
-          name="city"
         />
-        <label> اطلاعات آدرس (پلاک ,خیابان , ... ) </label>
+        <label> نشانی پستی</label>
       </IftaLabel>
+      <div class="flex justify-between pt-2">
+        <span> آدرس بالا بر اساس موقعیت انتخابی شما وارد شده است. </span>
+        <button
+          type="button"
+          @click="visible = true"
+          class="text-primary-500 pt-2"
+        >
+          ویرایش موقعیت مکانی روی نقشه
+        </button>
+      </div>
     </FormField>
 
     <div class="col-span-full">
       <MyButton
-        @click="submit"
         color="bg-primary-600"
         class="text-white ms-auto mt-4 w-56 !py-4"
       >
         ثبت آدرس
       </MyButton>
     </div>
-  </div>
+  </Form>
 </template>
 
 <script setup lang="ts">
-import provinces from "~/const/provinces.json";
 import cities from "~/const/cities.json";
-import { type AddressDetailInPut } from "@/api";
 import type { ApiAddress, Position } from "~/types";
+import { zodResolver } from "@primevue/forms/resolvers/zod";
+import { z } from "zod";
+import { addressValidator, getErrorMessage } from "~/validation";
 import { tileProvider } from "~/const/map";
+
+const form = ref();
+
 const props = defineProps<{
   address: {
-    province: number | string;
-    city: number | string;
+    province: string;
+    city: string;
     address_detail: string;
     id?: number;
     position?: Position;
     postal_code: string;
   };
 }>();
+
+const addressResolver = zodResolver(z.object(addressValidator));
 
 const defaultLocation: Position = {
   lat: 35.676045,
@@ -133,17 +159,29 @@ const defaultLocation: Position = {
 const visible = ref(false);
 
 const getCities = computed(() => {
-  const provinceId = (model.value.province as any)?.id ?? model.value.province;
-  return cities.filter((city) => city.province_id === provinceId) ?? [];
+  return cities[model.value.province as keyof typeof cities] ?? [];
 });
 
 const emit = defineEmits(["submit"]);
 
-const model = ref({ ...props.address, position: { ...defaultLocation } });
+const model = useState("addressModel", () => ({
+  ...props.address,
+  position: { ...defaultLocation },
+}));
 
-async function submit() {
-  const objectToSend = { ...model.value };
-  emit("submit", objectToSend);
+const toast = useToast();
+async function submit({ valid, errors, ...rest }: any) {
+  const errmsg = getErrorMessage(errors);
+  if (errmsg) {
+    toast.add({
+      severity: "error",
+      summary: "خطا",
+      detail: errmsg,
+      life: 3000,
+    });
+    return;
+  }
+  emit("submit", model.value);
 }
 
 const map = ref();
@@ -162,34 +200,35 @@ function rep(value: any, isLast = false) {
 
 async function centerUpdated(value: any) {
   model.value.position = value;
+}
+
+async function submitAddressFromApi() {
   const { position } = model.value;
   try {
     const res = (await $fetch(
       `http://nominatim.openstreetmap.org/reverse?format=json&accept-language=fa&addressdetails=1&lon=${position.lng}&lat=${position.lat}`
     )) as ApiAddress;
 
-    model.value.postal_code = res.display_name;
-    model.value.address_detail = `${rep(res.address.province)}${rep(
-      res.address.district
-    )} ${rep(res.address.country)} ${rep(res.address.city)} ${rep(
-      res.address.town
-    )} ${rep(res.address.suburb)}${rep(res.address.road)}${rep(
-      res.address.neighbourhood,
-      true
-    )}`;
+    model.value.address_detail = res.display_name;
 
     const apiProvince = (res.address.state ?? res.address.province)
       .replace("استان", "")
       .trim();
 
-    model.value.province = provinces.find(
-      (province) => province.name === apiProvince
-    )?.id!;
-    model.value.city = cities.find(
-      (city) => city.name == res.address.city
-    )?.id!;
+    model.value.province = apiProvince;
+    model.value.city =
+      cities[apiProvince as keyof typeof cities].find(
+        (city) =>
+          res.address.city.includes(city.name) ||
+          city.name.includes(res.address.city)
+      )?.name ?? "";
 
-    console.log(res.address);
+    for (const key of Object.keys(form.value.states)) {
+      form.value.states[key].touched = true;
+    }
+
+    visible.value = false;
+    console.log(form.value.states);
   } catch (error) {
     console.warn("some problem accord when getting city name");
   }

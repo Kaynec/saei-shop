@@ -7,6 +7,7 @@
   <NuxtLayout>
     <div class="flex min-h-[100svh] flex-col max-w-full text-gray-900">
       <Toast />
+      <ConfirmDialog></ConfirmDialog>
       <LoginSignup />
       <Header />
       <!-- <NuxtPage /> -->

@@ -1,4 +1,5 @@
 import type {
+  AddressInPut,
   AddressModel,
   CategoryOutPut,
   ProudctOutPut,
@@ -268,3 +269,30 @@ export type Card = {
 };
 
 export type AddressModelWithSelected = AddressModel & { selected: boolean };
+
+export type MyAddressInPut = AddressInPut & {
+  id?: number;
+  position: {
+    lat: number;
+    lng: number;
+  };
+};
+
+export type TransformedProvince = {
+  id: number;
+  name: string;
+  slug: string;
+  province_id: number;
+}[];
+export type Profile = {
+  firstname: string;
+  lastname: string;
+  national_code: string;
+  phone_number: string;
+  email: string;
+  birthdate: string;
+  password: string;
+  confirm_password: string;
+  profile_image: string;
+  otp: string;
+};

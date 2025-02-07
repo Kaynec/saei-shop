@@ -1,5 +1,6 @@
 <template>
   <MyCard class="shadow-none">
+    <FitLoadingScreen v-if="loading" />
     <!-- Personal Details -->
     <Dialog
       :pt="{
@@ -16,10 +17,29 @@
           class="grid grid-cols-12 gap-4 gap-y-12"
           @submit="onFormSubmit"
         >
+          <div
+            class="col-span-full justify-center items-center flex flex-col gap-4"
+          >
+            <NuxtImg
+              :src="imgPreview"
+              alt="user photo"
+              class="object-cover rounded-full w-24 h-24"
+            />
+            <FileUpload
+              choose-label="انتخاب عکس شخصی"
+              mode="basic"
+              @select="onFileSelect"
+              customUpload
+              auto
+              severity="secondary"
+              class="p-button-outlined"
+            />
+          </div>
+
           <FormField
-            class="col-span-6 md:col-span-4 flex flex-col gap-2"
+            class="col-span-6 flex flex-col gap-2"
             :initialValue="model.firstname"
-            name="name"
+            name="firstname"
           >
             <IftaLabel>
               <InputText
@@ -32,7 +52,7 @@
           </FormField>
 
           <FormField
-            class="col-span-6 md:col-span-4 flex flex-col gap-2"
+            class="col-span-6 flex flex-col gap-2"
             :initialValue="model.lastname"
             name="lastname"
           >
@@ -46,8 +66,8 @@
             </IftaLabel>
           </FormField>
 
-          <FormField
-            class="col-span-6 md:col-span-4 flex flex-col gap-2"
+          <!-- <FormField
+            class="col-span-6  flex flex-col gap-2"
             :initialValue="model.national_code"
             name="national_code"
           >
@@ -59,16 +79,16 @@
               />
               <label>کد ملی</label>
             </IftaLabel>
-          </FormField>
+          </FormField> -->
 
           <FormField
-            class="col-span-6 md:col-span-4 flex flex-col gap-2"
-            :initialValue="model.birth_date"
-            name="birth_date"
+            class="col-span-6 flex flex-col gap-2"
+            :initialValue="model.birthdate"
+            name="birthdate"
           >
             <IftaLabel>
               <InputText
-                v-model="model.password"
+                v-model="model.birthdate"
                 class="my-input"
                 variant="outlined"
                 data-jdp
@@ -78,7 +98,7 @@
           </FormField>
 
           <FormField
-            class="col-span-6 md:col-span-4 flex flex-col gap-2"
+            class="col-span-6 flex flex-col gap-2"
             :initialValue="model.phone_number"
             name="phone_number"
           >
@@ -119,7 +139,7 @@
     >
       <template #default>
         <Form
-          :resolver="passwordValidator"
+          :resolver="passwordResolver"
           class="flex flex-col gap-4 gap-y-12 max-w-2xl mx-auto"
           @submit="onPasswordFormSubmit"
         >
@@ -133,7 +153,13 @@
               />
               <label> کد تایید احراز هویت</label>
             </IftaLabel>
-            <button class="text-primary-500 pt-2">ارسال مجدد کد تایید</button>
+            <button
+              type="button"
+              @click="requestPasswordReset"
+              class="text-primary-500 pt-2"
+            >
+              ارسال مجدد کد تایید
+            </button>
           </FormField>
 
           <FormField
@@ -141,18 +167,14 @@
             name="password"
             v-slot="$field"
           >
-            <IftaLabel>
-              <Password
-                :feedback="false"
-                fluid
-                v-model="model.password"
-                class="my-input"
-                variant="outlined"
-                name="password"
-              />
+            <PasswordInput
+              :feedback="false"
+              v-model="model.password"
+              class="my-input"
+              variant="outlined"
+              name="password"
+            />
 
-              <label>رمز عبور</label>
-            </IftaLabel>
             <div class="py-2" v-if="$field?.invalid">
               <Message
                 v-for="(error, index) of $field.errors"
@@ -170,19 +192,15 @@
             name="confirm_password"
             :initialValue="model.confirm_password"
           >
-            <IftaLabel class="col-span-12">
-              <Password
-                :feedback="false"
-                fluid
-                v-model="model.confirm_password"
-                class="my-input"
-                variant="outlined"
-                name="confirm_password"
-                :initialValue="model.confirm_password"
-              />
+            <PasswordInput
+              :feedback="false"
+              v-model="model.confirm_password"
+              class="my-input"
+              variant="outlined"
+              name="confirm_password"
+              label="تکرار رمز عبور"
+            />
 
-              <label>تکرار رمز عبور</label>
-            </IftaLabel>
             <div class="py-2" v-if="$field?.invalid">
               <Message
                 v-for="(error, index) of $field.errors"
@@ -256,17 +274,8 @@
           variant="outlined"
           data-jdp
         />
-        <!-- <date-picker :value="model.birth_date" clearable></date-picker> -->
+        <!-- <date-picker :value="model.birthdate" clearable></date-picker> -->
         <label>تاریخ تولد</label>
-      </IftaLabel>
-      <IftaLabel class="col-span-6 md:col-span-4">
-        <InputText
-          disabled
-          :value="model.password"
-          class="my-input"
-          variant="outlined"
-        />
-        <label>رمز عبور</label>
       </IftaLabel>
 
       <div class="col-span-full gap-2 flex">
@@ -278,7 +287,7 @@
           ویرایش اطلاعات شخصی
         </MyButton>
         <MyButton
-          @click="passwordVisible = true"
+          @click="requestPasswordReset"
           class="text-white w-56"
           color="bg-primary-600"
         >
@@ -294,29 +303,34 @@ import {
   basicValidator,
   passwordValidator,
   getErrorMessage,
+  otpValidator,
 } from "~/validation";
 
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
-
-type Profile = {
-  firstname: string;
-  lastname: string;
-  national_code: string;
-  phone_number: string;
-  email: string;
-  birth_date: string;
-  password: string;
-  confirm_password: string;
-  otp: string;
-};
+import type { Profile } from "~/types";
+import { useAuthStore } from "~/store/auth";
+import { formatJalaliToGeorgianDate, getUserPhoto } from "~/util";
+import {
+  apiUserChangePasswordCreate,
+  apiUserRequsetChangePasswordCreate,
+  apiUserUserUpdate,
+  type UserInput,
+} from "~/api";
 
 const toast = useToast();
 
 const visible = ref(false);
 const passwordVisible = ref(false);
 
+const store = useAuthStore();
+
 onMounted(async () => {
+  /**
+   * When component is mounted, format birthdate
+   * to Persian locale if birthdate exists
+   */
+
   // @ts-ignore
   await import("@majidh1/jalalidatepicker");
 
@@ -324,6 +338,11 @@ onMounted(async () => {
   setTimeout(() => {
     document.querySelector("jdp-container")?.classList.toggle("z-[10000000]");
   }, 2500);
+
+  if (!model.value.birthdate) return;
+  model.value.birthdate = new Date(model.value.birthdate).toLocaleDateString(
+    "fa-Fa-u-nu-latn"
+  );
 });
 
 const model = ref<Profile>({
@@ -332,30 +351,67 @@ const model = ref<Profile>({
   national_code: "۰۰۲۳۵۰۴۳۴۳",
   phone_number: "09104507847",
   email: "behrad.abniki@gmail.com",
-  birth_date: "",
+  birthdate: "",
   password: "********",
   confirm_password: "********",
   otp: "",
+  ...(store.user as any),
 });
 
 const resolver = zodResolver(
   z.object({
     ...basicValidator,
-    national_code: z.string().min(1, { message: "کد ملی خود را وارد کنید." }),
-    birth_date: z.string().min(1, { message: "تاریخ تولد خود را وارد کنید." }),
-    otp: z
-      .string()
-      .min(6, { message: "کد احراز هویت باید حداقل 6 کاراکتر باشد" })
-      .max(6, { message: "کد احراز هویت باید حداکثر 6 کاراکتر باشد" }),
+    birthdate: z.string().min(1, { message: "تاریخ تولد خود را وارد کنید." }),
+    // national_code: z.string().min(1, { message: "کد ملی خود را وارد کنید." }),
+  })
+);
+
+const passwordResolver = zodResolver(
+  z.object({
+    ...passwordValidator,
+    ...otpValidator,
   })
 );
 
 const onPasswordFormSubmit = ({ valid, errors }: any) => {
-  if (valid) {
-    // do your thing xo xo
+  const errmsg = getErrorMessage(errors);
+  if (errmsg) {
+    toast.add({
+      severity: "error",
+      summary: errmsg,
+      life: 3000,
+    });
+    return;
   }
+  loading.value = true;
+  apiUserChangePasswordCreate({
+    phone_number: model.value.phone_number,
+    otp: model.value.otp as any,
+    new_password: model.value.password,
+    confirm_new_password: model.value.confirm_password,
+  })
+    .then(() => {
+      toast.add({
+        severity: "success",
+        summary: "تایید شد",
+        life: 3000,
+      });
+      passwordVisible.value = false;
+    })
+    .catch((err) => {
+      toast.add({
+        severity: "error",
+        summary: "خطا در تغییر رمز عبور",
+        detail: err.response.data.error,
+        life: 3000,
+      });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
+const loading = ref(false);
 const onFormSubmit = ({ valid, errors }: any) => {
   const errmsg = getErrorMessage(errors);
   if (errmsg) {
@@ -366,10 +422,70 @@ const onFormSubmit = ({ valid, errors }: any) => {
     });
     return;
   }
-  toast.add({
-    severity: "success",
-    summary: "فرم با موفقیت ارسال شد",
-    life: 3000,
-  });
+  loading.value = true;
+
+  const birthDate = formatJalaliToGeorgianDate(model.value.birthdate!);
+  const { profile_image, ...rest } = model.value;
+
+  const objtosend = { ...rest } as UserInput;
+
+  if (typeof profile_image === "object" && profile_image !== null) {
+    objtosend.profile_image = profile_image;
+  }
+
+  if (birthDate) {
+    objtosend.birthdate = birthDate;
+  }
+
+  apiUserUserUpdate(objtosend)
+    .catch((err) => {
+      toast.add({
+        severity: "error",
+        summary: "خطا",
+        detail: err.response.data.error,
+        life: 3000,
+      });
+    })
+    .then((res) => {
+      store.setUser(res!);
+      toast.add({
+        severity: "success",
+        summary: "فرم با موفقیت ارسال شد",
+        life: 3000,
+      });
+    })
+    .catch((err) => {
+      toast.add({
+        severity: "error",
+        summary: "خطا",
+        detail: err.response.data.error,
+        life: 3000,
+      });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
+
+const imgPreview = ref(getUserPhoto(store.user!));
+
+function onFileSelect(event: any) {
+  const file = event.files[0];
+  model.value.profile_image = file;
+  const reader = new FileReader();
+
+  reader.onload = async (e) => {
+    imgPreview.value = (e.target as any).result;
+  };
+
+  reader.readAsDataURL(file);
+}
+
+function requestPasswordReset() {
+  passwordVisible.value = true;
+
+  apiUserRequsetChangePasswordCreate({
+    phone_number: model.value.phone_number,
+  });
+}
 </script>

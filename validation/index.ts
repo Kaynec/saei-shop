@@ -57,8 +57,24 @@ export const otpValidator = {
     .max(6, { message: "کد تایید باید حداکثر 6 رقم باشد" }),
 };
 
+export const addressValidator = {
+  address_detail: z.string({ message: "اطلاعات آدرس خود را وارد کنید." }),
+  city: z.string({ message: "شهر خود را وارد کنید." }),
+  province: z.string({ message: "استان خود را وارد کنید." }),
+  postal_code: z
+    .string()
+    .min(10, { message: "کد پستی باید 10 رقم باشد." })
+    .max(10, { message: "کد پستی باید 10 رقم باشد." })
+    .regex(/\b(?!(\d)\1{3})[13-9]{4}[1346-9][013-9]{5}\b/, {
+      message: "فرمت کد پستی اشتباه است",
+    }),
+};
+
 export function getErrorMessage(errors: any) {
-  for (const [key, value] of Object.entries(errors)) {
+  if (!errors) {
+    return "wtf";
+  }
+  for (const value of Object.values(errors)) {
     const errmsgs = (value as { message: string }[])?.map((el) => el.message);
     if (errmsgs?.length > 0) {
       return errmsgs[0];

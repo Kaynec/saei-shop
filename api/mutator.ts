@@ -70,35 +70,30 @@ export const customInstance = async <T>({
     headers: {
       ...formattedHeaders,
     },
-  })
-    .then((response) => {
-      console.log(response, "response");
-      return response;
-    })
-    .catch(async (error) => {
-      // console.log(error, "error");
-      const errorObject = error as any;
-      // 401 Error
-      const refresh = await getRefreshToken();
-      if (errorObject && errorObject.statusCode === 401 && refresh) {
-        $fetch(`${baseURL}/api/auth/jwt/refresh`, {
-          body: {
-            refresh,
-          },
+  }).catch(async (error) => {
+    // console.log(error, "error");
+    const errorObject = error as any;
+    // 401 Error
+    const refresh = await getRefreshToken();
+    if (errorObject && errorObject.statusCode === 401 && refresh) {
+      $fetch(`${baseURL}/api/auth/jwt/refresh`, {
+        body: {
+          refresh,
+        },
+      })
+        .then((r) => {
+          if (!r) return;
+          if (r && r.data && r.data.access) {
+            setToken(r.access || r.data.access);
+          }
         })
-          .then((r) => {
-            if (!r) return;
-            if (r && r.data && r.data.access) {
-              setToken(r.access || r.data.access);
-            }
-          })
-          .catch(() => {
-            setToken("");
-            setRefreshToken("");
-            window.location.href = "/";
-          });
-      } else throw error;
-    });
+        .catch(() => {
+          setToken("");
+          setRefreshToken("");
+          window.location.href = "/";
+        });
+    } else throw error;
+  });
 };
 
 export default customInstance;

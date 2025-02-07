@@ -5,12 +5,12 @@
         <div class="flex items-center gap-2">
           <img
             class="w-12 h-12 rounded-full"
-            src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-            alt="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+            :src="getUserPhoto(user)"
+            :alt="getUserPhoto(user)"
           />
           <div class="flex flex-col">
-            <span> بهراد اب نیکی</span>
-            <span class="text-xs text-grey-300">09104507847</span>
+            <span> {{ getUserName(user) }}</span>
+            <span class="text-xs text-grey-300">{{ user?.phone_number }}</span>
           </div>
         </div>
       </div>
@@ -34,25 +34,25 @@
 
     <MyCard
       :class="
-        currentTab === 'tickets' ? '!bg-transparent !shadow-none !p-0 !m-0' : ''
+        activeTab === 'tickets' ? '!bg-transparent !shadow-none !p-0 !m-0' : ''
       "
       class="flex-1"
     >
       <div>
-        <template v-if="currentTab !== 'tickets'">
+        <template v-if="activeTab !== 'tickets'">
           <div class="flex items-center max-h-10 gap-2">
             <div class="text bg-grey-50 shadow-lg rounded w-9 h-9 flex-center">
               <Icon
-                :name="tabs.find(tab=>tab.tab == currentTab)?.icon!"
+                :name="tabs.find((tab) => tab.tab == activeTab)?.icon!"
                 class="text-2xl text-grey-400"
               />
             </div>
-            {{ tabs.find((tab) => tab.tab == currentTab)?.tabname! }}
+            {{ tabs.find((tab) => tab.tab == activeTab)?.tabname! }}
           </div>
           <Divider />
         </template>
 
-        <component :is="tabs.find(tab=>tab.tab == currentTab)?.component!" />
+        <component :is="tabs.find((tab) => tab.tab == activeTab)?.component!" />
       </div>
     </MyCard>
   </div>
@@ -66,6 +66,12 @@ import Favourite from "~/components/Dashboard/Favourite.vue";
 import Orders from "~/components/Dashboard/Orders.vue";
 import ProfileDetail from "~/components/Dashboard/ProfileDetail.vue";
 import Ticket from "~/components/Dashboard/Ticket/Ticket.vue";
+import { useAuthStore } from "~/store/auth";
+import { getUserName, getUserPhoto } from "~/util";
+
+const store = useAuthStore();
+
+const user = store.user!;
 
 const tabs = [
   {
@@ -122,11 +128,13 @@ const tabs = [
   },
 ];
 
-const activeTab = useState<string>("activeTab", () => "dashboard");
-const currentTab = useState<string>("currentTab", () => "dashboard");
+const activeTab = useCookie<string>("dashboardTab", {
+  default() {
+    return "dashboard";
+  },
+});
 
 function changeTab(tab: string) {
   activeTab.value = tab;
-  currentTab.value = tab;
 }
 </script>

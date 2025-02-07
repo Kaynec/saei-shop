@@ -21,22 +21,21 @@
         </MyButton>
 
         <!-- Login Or Log Out -->
+
         <MyButton
-          v-if="authStore.isAuthenticated"
-          @click="authStore.logout()"
+          @click="
+            () => {
+              if (authStore.isAuthenticated) {
+                navigateTo('/dashboard');
+              } else {
+                globalState.toggleLoginDialog();
+              }
+            }
+          "
           color="bg-orange-400 text-white"
-          class="px-2"
+          class="px-2 min-w-12"
         >
-          <span> خروج</span>
-          <Icon name="mdi:close-octagon-outline" class="text-2xl" />
-        </MyButton>
-        <MyButton
-          v-else
-          @click="globalState.toggleLoginDialog()"
-          color="bg-orange-400 text-white"
-          class="px-2"
-        >
-          <span> ورود / ثبت نام </span>
+          <span v-if="!authStore.isAuthenticated"> ورود / ثبت نام </span>
           <Icon name="mdi:account-outline" class="text-2xl" />
         </MyButton>
 
@@ -74,7 +73,7 @@
 <script setup lang="ts">
 import { Links } from "~/const/SiteDetails";
 import { useAuthStore } from "~/store/auth";
-import { useGlobalState } from "~/store/global";
+import { useGlobalStore } from "~/store/global";
 
 const authStore = useAuthStore();
 
@@ -98,7 +97,7 @@ onMounted(() => {
   toggleClose?.addEventListener("click", handleClick);
 });
 
-const globalState = useGlobalState();
+const globalState = useGlobalStore();
 </script>
 
 <style scoped></style>

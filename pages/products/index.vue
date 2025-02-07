@@ -103,7 +103,7 @@ import {
   apiProductCategoryListRetrieve,
   apiProductGetProductRetrieve,
   type ApiProductGetProductRetrieveParams,
-  type CategoryOutPut,
+  type CategoryListOutPut,
   type ProudctOutPut,
 } from "@/api";
 import { useDebounceFn } from "@vueuse/core";
@@ -208,7 +208,7 @@ const count = ref(0);
 const filterTypes = ref();
 
 // Just Flatlining The Response Into One Array
-function recursiveWrapper(labels: CategoryOutPut[]) {
+function recursiveWrapper(labels: CategoryListOutPut[]) {
   const result: Label[] = [];
   function recursivelyFindAllChildrenElement(labels: any[]) {
     if (!labels || !labels.length) return;
@@ -223,7 +223,7 @@ function recursiveWrapper(labels: CategoryOutPut[]) {
   return result;
 }
 
-function setUpBrandAndCategories(cats: CategoryOutPut[], brands: Brand[]) {
+function setUpBrandAndCategories(cats: CategoryListOutPut[], brands: Brand[]) {
   const newBrands =
     brands?.map((el) => ({
       ...el,
@@ -259,7 +259,7 @@ const {
       // Fetch categories and brands
       const categories = (await apiProductCategoryListRetrieve(
         CategoryTypes.PRODUCT
-      )) as unknown as CategoryOutPut[];
+      )) as unknown as CategoryListOutPut[];
 
       const brands =
         (await apiProductBrandListRetrieve()) as unknown as Brand[];

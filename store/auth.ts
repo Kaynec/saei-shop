@@ -20,11 +20,9 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   function logout() {
-    console.log("XO XO");
     token.value = "";
     refreshToken.value = "";
     user.value = null;
-    console.log("XO XO");
   }
 
   async function setUserData() {
@@ -47,7 +45,10 @@ export const useAuthStore = defineStore("auth", () => {
   );
 
   return {
-    setToken: (newToken: string) => (token.value = newToken),
+    setToken: (newToken: string) => {
+      console.log(newToken, token.value);
+      token.value = newToken;
+    },
     setRefreshToken: (newToken: string) => (refreshToken.value = newToken),
     setUser: (newUser: UserOutPut) => (user.value = newUser),
     isAuthenticated,

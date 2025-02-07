@@ -1,6 +1,7 @@
-import { createGlobalState } from "@vueuse/core";
+import { apiUserUserRetrieve, type UserOutPut } from "@/api";
+import { acceptHMRUpdate, defineStore } from "pinia";
 
-export const useGlobalState = createGlobalState(() => {
+export const useGlobalStore = defineStore("global", () => {
   const loginDialog = useState<boolean>("loginDialog", () => false);
 
   function getLoginDialog() {
@@ -19,5 +20,8 @@ export const useGlobalState = createGlobalState(() => {
     getLoginDialog,
     toggleLoginDialog,
     activeStep,
+    changeActiveStep: (newStep: number) => (activeStep.value = newStep),
   };
 });
+if (import.meta.hot)
+  import.meta.hot.accept(acceptHMRUpdate(useGlobalStore, import.meta.hot));

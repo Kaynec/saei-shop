@@ -17,17 +17,17 @@
             <MyButton color="bg-grey-50" class="aspect-square w-10 h-10">
               <Icon name="mdi:basket-outline" class="text-xl text-grey-400" />
             </MyButton>
+
             <MyButton
-              @click="authStore.logout()"
-              v-if="authStore.isAuthenticated"
-              color="bg-orange-400"
-              class="aspect-square w-10 h-10"
-            >
-              <Icon name="mdi:close-octagon-outline" class="text-xl" />
-            </MyButton>
-            <MyButton
-              v-else
-              @click="globalState.toggleLoginDialog()"
+              @click="
+                () => {
+                  if (authStore.isAuthenticated) {
+                    navigateTo('/dashboard');
+                  } else {
+                    globalState.toggleLoginDialog();
+                  }
+                }
+              "
               color="bg-orange-400"
               class="aspect-square w-10 h-10"
             >
@@ -84,9 +84,9 @@
 <script setup lang="ts">
 import { Links } from "~/const/SiteDetails";
 import { useAuthStore } from "~/store/auth";
-import { useGlobalState } from "~/store/global";
+import { useGlobalStore } from "~/store/global";
 
-const globalState = useGlobalState();
+const globalState = useGlobalStore();
 
 const visible = ref(false);
 const authStore = useAuthStore();

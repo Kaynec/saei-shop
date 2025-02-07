@@ -864,13 +864,16 @@ export const apiUserUserUpdate = (userInput: UserInput) => {
   const formData = new FormData();
   formData.append("firstname", userInput.firstname);
   formData.append("lastname", userInput.lastname);
-  if (userInput.email !== undefined) {
+  if (userInput.email !== undefined && userInput.email !== null) {
     formData.append("email", userInput.email);
   }
-  if (userInput.birthdate !== undefined) {
+  if (userInput.birthdate !== undefined && userInput.birthdate !== null) {
     formData.append("birthdate", userInput.birthdate);
   }
-  if (userInput.profile_image !== undefined) {
+  if (
+    userInput.profile_image !== undefined &&
+    userInput.profile_image !== null
+  ) {
     formData.append("profile_image", userInput.profile_image);
   }
 

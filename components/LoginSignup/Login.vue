@@ -50,6 +50,8 @@ const toast = useToast();
 
 const authStore = useAuthStore();
 
+console.log(authStore);
+
 const emit = defineEmits<{
   (e: "continue"): void;
   (e: "success"): void;
@@ -78,11 +80,19 @@ async function onSubmit({ valid, errors }: any) {
       phone_number: phone.value,
       password: password.value,
     })) as any;
+    console.log("XO XO");
+    console.log(res?.token?.access);
     authStore.setToken(res?.token?.access);
+    console.log("XO XO");
+    console.log(res?.token?.access);
+
     authStore.setRefreshToken(res?.token?.refresh);
+    console.log("XO XO");
+    console.log(res?.token?.access);
+
     getUserData();
 
-    isLoading.value = false;
+    console.log("XO XO");
     emit("success");
   } catch (error) {
     const err = error as any;
@@ -102,14 +112,14 @@ async function onSubmit({ valid, errors }: any) {
       });
 
       emit("continue");
-      isLoading.value = false;
-      return;
     }
+
     toast.add({
       severity: "error",
       summary: "خطایی رخ داده است",
       life: 3000,
     });
   }
+  isLoading.value = false;
 }
 </script>

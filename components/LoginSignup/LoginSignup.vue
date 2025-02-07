@@ -105,11 +105,11 @@
 </template>
 
 <script setup lang="ts">
-import { useGlobalState } from "~/store/global";
+import { useGlobalStore } from "~/store/global";
 
 const tabValue = ref("login");
 
-const globalState = useGlobalState();
+const globalState = useGlobalStore();
 
 const isLoading = ref(false);
 const phone = ref("");
