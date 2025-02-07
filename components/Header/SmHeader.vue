@@ -15,10 +15,23 @@
               <Icon name="mdi-bell-outline" class="text-xl text-grey-400" />
             </MyButton>
             <MyButton color="bg-grey-50" class="aspect-square w-10 h-10">
-              <Icon name="mdi:account-outline" class="text-xl text-grey-400" />
-            </MyButton>
-            <MyButton color="bg-grey-50" class="aspect-square w-10 h-10">
               <Icon name="mdi:basket-outline" class="text-xl text-grey-400" />
+            </MyButton>
+            <MyButton
+              @click="authStore.logout()"
+              v-if="authStore.isAuthenticated"
+              color="bg-orange-400"
+              class="aspect-square w-10 h-10"
+            >
+              <Icon name="mdi:close-octagon-outline" class="text-xl" />
+            </MyButton>
+            <MyButton
+              v-else
+              @click="globalState.toggleLoginDialog()"
+              color="bg-orange-400"
+              class="aspect-square w-10 h-10"
+            >
+              <Icon name="mdi:account-outline" class="text-xl text-grey-400" />
             </MyButton>
           </div>
 
@@ -26,10 +39,13 @@
             <Drawer v-model:visible="visible" header="   " class="relative">
               <div class="flex flex-col justify-between items-center p-3">
                 <ul class="flex flex-col items-start w-full gap-4 text-sm">
-                  <li>مقالات</li>
-                  <li>سوالات متداول</li>
-                  <li>درباره ما</li>
-                  <li>تماس با ما</li>
+                  <li v-for="link in Object.keys(Links)" :key="link">
+                    <NuxtLink
+                      :to="(Links as any)[link]"
+                      class="text-sm text-grey-400"
+                      >{{ link }}</NuxtLink
+                    >
+                  </li>
                   <li class="flex gap-2">
                     <span> ۰۲۱ - ۷۷۹۸۹۸00 </span>
                     <Icon
@@ -66,7 +82,14 @@
 </template>
 
 <script setup lang="ts">
+import { Links } from "~/const/SiteDetails";
+import { useAuthStore } from "~/store/auth";
+import { useGlobalState } from "~/store/global";
+
+const globalState = useGlobalState();
+
 const visible = ref(false);
+const authStore = useAuthStore();
 </script>
 
 <style scoped></style>

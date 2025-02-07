@@ -9,7 +9,7 @@ export const useAuthStore = defineStore("auth", () => {
     expires: new Date(Date.now() + 1000000 * 60),
   });
 
-  const user = useCookie<UserOutPut>("user", {
+  const user = useCookie<UserOutPut | null>("user", {
     expires: new Date(Date.now() + 1000000 * 60),
   });
 
@@ -17,6 +17,14 @@ export const useAuthStore = defineStore("auth", () => {
 
   function setCurrentPhoneNumber(newPhoneNumber: string) {
     phoneNumber.value = newPhoneNumber;
+  }
+
+  function logout() {
+    console.log("XO XO");
+    token.value = "";
+    refreshToken.value = "";
+    user.value = null;
+    console.log("XO XO");
   }
 
   async function setUserData() {
@@ -31,7 +39,7 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   const isAuthenticated = computed(() =>
-    Boolean(!!token.value && user.value?.firstname)
+    Boolean(!!token.value && !!refreshToken.value)
   );
 
   const currentuser = computed(() =>
@@ -50,6 +58,7 @@ export const useAuthStore = defineStore("auth", () => {
     phoneNumber,
     setCurrentPhoneNumber,
     refreshToken,
+    logout,
   };
 });
 

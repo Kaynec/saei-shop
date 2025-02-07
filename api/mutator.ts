@@ -3,22 +3,17 @@
 import { $fetch } from "ofetch";
 import type { FetchError } from "ofetch";
 import { usePVToastService } from "~/api/toast";
-import { useAuthStore } from "./auth";
+import { useAuthStore } from "~/store/auth";
 
-// const baseURL = "https://backend-cheatsgame.iran.liara.run"; // use your own URL here or environment variable
-
-const baseURL = "https://backend-cheatsgame.iran.liara.run"; // Updated to point to the JSON server
+const baseURL = "https://saeishop-backend.liara.run"; // Updated to point to the JSON server
 
 const loginApis = [
   "/api/user/register/",
   "/api/user/change-password/",
   "/api/user/request-verify-phone/",
   "/api/user/request-change-password/",
-  ,
   "/api/user/verify-phone/",
-  ,
   "/api/auth/jwt/verify/",
-  ,
   "/api/auth/jwt/customer-login/",
 ];
 
@@ -68,36 +63,42 @@ export const customInstance = async <T>({
   }
   const reformedUrl =
     `${baseURL}${url}` + `${params ? "?" + new URLSearchParams(params) : ""}`;
+
   return $fetch(reformedUrl, {
     method,
     ...(data ? { body: data } : {}),
     headers: {
       ...formattedHeaders,
     },
-  }).catch(async (error) => {
-    const errorObject = error as any;
-    // 401 Error
-    const refresh = await getRefreshToken();
-    if (errorObject && errorObject.statusCode === 401 && refresh) {
-      $fetch(`${baseURL}/api/auth/jwt/refresh`, {
-        body: {
-          refresh,
-        },
-      })
-        .then((r) => {
-          if (!r) return;
-          if (r && r.data && r.data.access) {
-            setToken(r.access || r.data.access);
-          }
+  })
+    .then((response) => {
+      console.log(response, "response");
+      return response;
+    })
+    .catch(async (error) => {
+      // console.log(error, "error");
+      const errorObject = error as any;
+      // 401 Error
+      const refresh = await getRefreshToken();
+      if (errorObject && errorObject.statusCode === 401 && refresh) {
+        $fetch(`${baseURL}/api/auth/jwt/refresh`, {
+          body: {
+            refresh,
+          },
         })
-        .catch(() => {
-          setToken("");
-          setRefreshToken("");
-          window.location.href = "/";
-        });
-      return;
-    }
-  });
+          .then((r) => {
+            if (!r) return;
+            if (r && r.data && r.data.access) {
+              setToken(r.access || r.data.access);
+            }
+          })
+          .catch(() => {
+            setToken("");
+            setRefreshToken("");
+            window.location.href = "/";
+          });
+      } else throw error;
+    });
 };
 
 export default customInstance;

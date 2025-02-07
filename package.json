@@ -7,7 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "codegen": "orval --config ./orval.config.ts"
   },
   "dependencies": {
     "@alireza-ab/vue-persian-datepicker": "^2.3.2",
@@ -27,6 +28,7 @@
     "embla-carousel-vue": "^8.5.2",
     "markdown-it": "^14.1.0",
     "nuxt": "^3.15.1",
+    "orval": "^7.5.0",
     "pinia": "^2.3.1",
     "primevue": "^4.2.5",
     "tailwindcss-primeui": "^0.4.0",
@@ -38,6 +40,7 @@
   },
   "devDependencies": {
     "@primevue/nuxt-module": "^4.2.5",
-    "@tailwindcss/typography": "^0.5.16"
+    "@tailwindcss/typography": "^0.5.16",
+    "prettier": "^3.4.2"
   }
 }

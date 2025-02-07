@@ -4,7 +4,7 @@
       <IconField>
         <InputText
           class="my-input"
-          id="password"
+          :id="'password' + Math.random() * 10000000"
           variant="outlined"
           :type="showPassword ? 'text' : 'password'"
           v-model="password"
@@ -18,12 +18,16 @@
           </MyButton>
         </InputIcon>
       </IconField>
-      <label for="password">رمز عبور</label>
+      <label for="password">{{ label ?? "رمز عبور" }}</label>
     </FloatLabel>
   </div>
 </template>
 
 <script setup lang="ts">
+defineProps<{
+  label?: string;
+}>();
+
 const showPassword = ref(true);
 
 function togglePassword() {

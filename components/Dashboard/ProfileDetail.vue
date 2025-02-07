@@ -18,12 +18,12 @@
         >
           <FormField
             class="col-span-6 md:col-span-4 flex flex-col gap-2"
-            :initialValue="model.name"
+            :initialValue="model.firstname"
             name="name"
           >
             <IftaLabel>
               <InputText
-                v-model="model.name"
+                v-model="model.firstname"
                 class="my-input"
                 variant="outlined"
               />
@@ -33,12 +33,12 @@
 
           <FormField
             class="col-span-6 md:col-span-4 flex flex-col gap-2"
-            :initialValue="model.last_name"
-            name="last_name"
+            :initialValue="model.lastname"
+            name="lastname"
           >
             <IftaLabel>
               <InputText
-                v-model="model.last_name"
+                v-model="model.lastname"
                 class="my-input"
                 variant="outlined"
               />
@@ -119,7 +119,7 @@
     >
       <template #default>
         <Form
-          :resolver="passwordResolver"
+          :resolver="passwordValidator"
           class="flex flex-col gap-4 gap-y-12 max-w-2xl mx-auto"
           @submit="onPasswordFormSubmit"
         >
@@ -167,18 +167,18 @@
 
           <FormField
             v-slot="$field"
-            name="confirmPassword"
-            :initialValue="model.confirmPassword"
+            name="confirm_password"
+            :initialValue="model.confirm_password"
           >
             <IftaLabel class="col-span-12">
               <Password
                 :feedback="false"
                 fluid
-                v-model="model.confirmPassword"
+                v-model="model.confirm_password"
                 class="my-input"
                 variant="outlined"
-                name="confirmPassword"
-                :initialValue="model.confirmPassword"
+                name="confirm_password"
+                :initialValue="model.confirm_password"
               />
 
               <label>تکرار رمز عبور</label>
@@ -212,7 +212,7 @@
       <IftaLabel class="col-span-6 md:col-span-4">
         <InputText
           disabled
-          :value="model.name"
+          :value="model.firstname"
           class="my-input"
           variant="outlined"
         />
@@ -290,18 +290,24 @@
 </template>
 
 <script setup lang="ts">
+import {
+  basicValidator,
+  passwordValidator,
+  getErrorMessage,
+} from "~/validation";
+
 import { zodResolver } from "@primevue/forms/resolvers/zod";
 import { z } from "zod";
 
 type Profile = {
-  name: string;
-  last_name: string;
+  firstname: string;
+  lastname: string;
   national_code: string;
   phone_number: string;
   email: string;
   birth_date: string;
   password: string;
-  confirmPassword: string;
+  confirm_password: string;
   otp: string;
 };
 
@@ -313,72 +319,35 @@ const passwordVisible = ref(false);
 onMounted(async () => {
   // @ts-ignore
   await import("@majidh1/jalalidatepicker");
-  console.log((window as any).jalaliDatepicker);
+
   (window as any).jalaliDatepicker.startWatch();
   setTimeout(() => {
-    console.log(document.querySelector("jdp-container"));
     document.querySelector("jdp-container")?.classList.toggle("z-[10000000]");
   }, 2500);
 });
 
 const model = ref<Profile>({
-  name: "برکه",
-  last_name: "حسینی",
+  firstname: "برکه",
+  lastname: "حسینی",
   national_code: "۰۰۲۳۵۰۴۳۴۳",
   phone_number: "09104507847",
   email: "behrad.abniki@gmail.com",
   birth_date: "",
   password: "********",
-  confirmPassword: "********",
+  confirm_password: "********",
   otp: "",
 });
 
 const resolver = zodResolver(
   z.object({
-    name: z.string().min(2, { message: "لطفا نام خود را را وارد کنید." }),
-    last_name: z
-      .string()
-      .min(2, { message: "لطفا نام خانوادگی خود را وارد کنید." }),
-    phone_number: z
-      .string()
-      .min(1, { message: "شماره تلفن خود را وارد کنید." }),
+    ...basicValidator,
     national_code: z.string().min(1, { message: "کد ملی خود را وارد کنید." }),
     birth_date: z.string().min(1, { message: "تاریخ تولد خود را وارد کنید." }),
+    otp: z
+      .string()
+      .min(6, { message: "کد احراز هویت باید حداقل 6 کاراکتر باشد" })
+      .max(6, { message: "کد احراز هویت باید حداکثر 6 کاراکتر باشد" }),
   })
-);
-
-const passwordResolver = zodResolver(
-  z
-    .object({
-      password: z
-        .string()
-        .min(8, { message: "رمز عبور باید حداقل 8 کاراکتر باشد" })
-        .refine((password) => /[A-Z]/.test(password), {
-          message: "رمز عبور باید شامل حروف بزرگ باشد",
-        })
-        .refine((password) => /[a-z]/.test(password), {
-          message: "رمز عبور باید شامل حروف کوچک باشد",
-        })
-        .refine((password) => /[0-9]/.test(password), {
-          message: "رمز عبور باید شامل اعداد باشد",
-        })
-        .refine((password) => /[!@#$%^&*]/.test(password), {
-          message: "رمز عبور باید شامل سیمبل باشد",
-        }),
-      confirmPassword: z.string(),
-      otp: z
-        .string()
-        .min(6, { message: "کد احراز هویت باید حداقل 6 کاراکتر باشد" })
-        .max(6, { message: "کد احراز هویت باید حداکثر 6 کاراکتر باشد" }),
-    })
-    .superRefine(({ confirmPassword, password }, ctx) => {
-      if (confirmPassword !== password)
-        ctx.addIssue({
-          code: "custom",
-          message: "رمز عبور و تکرار رمز عبور مطابقت ندارند",
-          path: ["confirmPassword"],
-        });
-    })
 );
 
 const onPasswordFormSubmit = ({ valid, errors }: any) => {
@@ -388,16 +357,14 @@ const onPasswordFormSubmit = ({ valid, errors }: any) => {
 };
 
 const onFormSubmit = ({ valid, errors }: any) => {
-  for (const [key, value] of Object.entries(errors)) {
-    const errmsgs = (value as { message: string }[])?.map((el) => el.message);
-    if (errmsgs?.length > 0) {
-      toast.add({
-        severity: "error",
-        summary: errmsgs[0],
-        life: 3000,
-      });
-      return;
-    }
+  const errmsg = getErrorMessage(errors);
+  if (errmsg) {
+    toast.add({
+      severity: "error",
+      summary: errmsg,
+      life: 3000,
+    });
+    return;
   }
   toast.add({
     severity: "success",

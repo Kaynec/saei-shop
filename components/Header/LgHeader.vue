@@ -19,7 +19,19 @@
         <MyButton color="bg-grey-50" class="aspect-square w-12 h-12">
           <Icon name="mdi-bell-outline" class="text-2xl text-grey-400" />
         </MyButton>
+
+        <!-- Login Or Log Out -->
         <MyButton
+          v-if="authStore.isAuthenticated"
+          @click="authStore.logout()"
+          color="bg-orange-400 text-white"
+          class="px-2"
+        >
+          <span> خروج</span>
+          <Icon name="mdi:close-octagon-outline" class="text-2xl" />
+        </MyButton>
+        <MyButton
+          v-else
           @click="globalState.toggleLoginDialog()"
           color="bg-orange-400 text-white"
           class="px-2"
@@ -27,6 +39,9 @@
           <span> ورود / ثبت نام </span>
           <Icon name="mdi:account-outline" class="text-2xl" />
         </MyButton>
+
+        <!--  -->
+
         <MyButton color="bg-grey-50" class="aspect-square w-12 h-12">
           <Icon name="mdi:basket-outline" class="text-2xl text-grey-400" />
         </MyButton>
@@ -58,7 +73,10 @@
 
 <script setup lang="ts">
 import { Links } from "~/const/SiteDetails";
+import { useAuthStore } from "~/store/auth";
 import { useGlobalState } from "~/store/global";
+
+const authStore = useAuthStore();
 
 onMounted(() => {
   var toggleOpen = document.getElementById("toggleOpen");
