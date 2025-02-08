@@ -22,3 +22,23 @@
     </div>
   </NuxtLayout>
 </template>
+
+<script setup lang="ts">
+import { SiteDetails } from "./const/SiteDetails";
+
+useHead({
+  htmlAttrs: {
+    lang: "fa",
+  },
+});
+
+// TODO configure this schema.org
+useSchemaOrg(
+  defineWebSite({
+    address: SiteDetails.address,
+    postalCode: SiteDetails.postal_code,
+    phone: SiteDetails.phone_number,
+    name: "فروشگاه ساعی",
+  })
+);
+</script>

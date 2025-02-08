@@ -8,17 +8,26 @@
           class="flex flex-row-reverse flex-wrap items-center lg:gap-y-2 gap-2 w-full"
         >
           <div class="flex gap-2 items-center">
-            <a href="javascript:void(0)" class="hidden max-sm:block"
+            <NuxtLink to="/" class="hidden max-sm:block"
               ><NuxtImg src="/logo.png" alt="logo" class="w-16" />
-            </a>
-            <MyButton color="bg-grey-50" class="aspect-square w-10 h-10">
+            </NuxtLink>
+            <MyButton
+              aria-label="bell-icon goes to notifications"
+              color="bg-grey-50"
+              class="aspect-square w-10 h-10"
+            >
               <Icon name="mdi-bell-outline" class="text-xl text-grey-400" />
             </MyButton>
-            <MyButton color="bg-grey-50" class="aspect-square w-10 h-10">
+            <MyButton
+              aria-label="basket icon goes to cart"
+              color="bg-grey-50"
+              class="aspect-square w-10 h-10"
+            >
               <Icon name="mdi:basket-outline" class="text-xl text-grey-400" />
             </MyButton>
 
             <MyButton
+              aria-label="user profile button"
               @click="
                 () => {
                   if (authStore.isAuthenticated) {
@@ -67,6 +76,7 @@
               color="bg-grey-50"
               class="aspect-square w-10 h-10"
               @click="visible = true"
+              name="hamburger menu button"
             >
               <Icon name="mdi:menu" class="text-2xl text-grey-400" />
             </MyButton>

@@ -3,32 +3,33 @@
     <Button
       unstyled
       :class="[
-        'text-grey-200 transition-all duration-300 w-8 h-8 flex items-center justify-center enabled:bg-white shadow-lg border-2 border-solid border-grey-50 rounded-full disabled:bg-grey-100',
+        'text-grey-200 transition-all duration-300 w-8 h-8 flex items-center justify-center enabled:bg-white shadow-lg border-2 border-solid border-grey-50 rounded-full disabled:bg-grey-50',
       ]"
       :disabled="!canScrollNext"
       @click="scrollNext()"
+      aria-label="next button carousel"
     >
       <Icon :class="['text-[48px]']" name="mdi:chevron-right" />
     </Button>
 
-    <button
+    <span
       v-for="(_, index) in carouselApi?.scrollSnapList() || []"
       :key="index"
-      :aria-label="'Slide ' + (index + 1)"
       :class="[
-        'bg-white w-3 h-3 rounded-full transition-all duration-300',
+        'bg-grey-50 w-3 h-3 hover:cursor-pointer :hover:bg-red-400 rounded-full',
         selected === index ? '!bg-gray-300 !w-8 !rounded-lg' : '',
       ]"
       @click="carouselApi?.scrollTo(index)"
-    ></button>
+    ></span>
 
     <Button
       unstyled
       :class="[
-        'text-grey-200 transition-all duration-300 w-8 h-8 flex items-center justify-center enabled:bg-white shadow-lg border-2 border-solid border-grey-50 rounded-full disabled:bg-grey-100',
+        'text-grey-200 transition-all duration-300 w-8 h-8 flex items-center justify-center enabled:bg-white shadow-lg border-2 border-solid border-grey-50 rounded-full disabled:bg-grey-50',
       ]"
       :disabled="!canScrollPrev"
       @click="scrollPrev()"
+      aria-label="prev button carousel"
     >
       <Icon :class="['text-[48px]']" name="mdi:chevron-left" />
     </Button>

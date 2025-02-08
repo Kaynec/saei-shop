@@ -16,7 +16,11 @@
         </IconField>
       </div>
       <div class="flex gap-2 items-center">
-        <MyButton color="bg-grey-50" class="aspect-square w-12 h-12">
+        <MyButton
+          aria-label="bell-icon goes to notifications"
+          color="bg-grey-50"
+          class="aspect-square w-12 h-12"
+        >
           <Icon name="mdi-bell-outline" class="text-2xl text-grey-400" />
         </MyButton>
 
@@ -41,7 +45,11 @@
 
         <!--  -->
 
-        <MyButton color="bg-grey-50" class="aspect-square w-12 h-12">
+        <MyButton
+          aria-label="basket icon goes to cart"
+          color="bg-grey-50"
+          class="aspect-square w-12 h-12"
+        >
           <Icon name="mdi:basket-outline" class="text-2xl text-grey-400" />
         </MyButton>
       </div>

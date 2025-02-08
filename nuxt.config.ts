@@ -1,6 +1,7 @@
 import Aura from "@primevue/themes/aura";
 
 import { definePreset } from "@primevue/themes";
+import { SiteDetails } from "./const/SiteDetails";
 
 const MyPreset = definePreset(Aura, {
   semantic: {
@@ -47,7 +48,26 @@ export default defineNuxtConfig({
     },
   },
 
-  // css: ["@majidh1/dist/jalalidatepicker.min.css"],
+  ssr: true,
+  nitro: {
+    minify: true,
+    compressPublicAssets: {
+      brotli: true,
+      gzip: true,
+    },
+  },
+
+  site: {
+    // TODO change the url
+    url: "",
+    name: "فروشگاه ساعی",
+    title: "فروشگاه ساعی",
+    description:
+      "فروشگاه ساعی فروشگاه خرید و خرید کالا با ایده های مختلف و موارد جدید برای شماست",
+    address: SiteDetails.address,
+    postal_code: SiteDetails.postal_code,
+    phone: SiteDetails.phone_number,
+  },
 
   tailwindcss: {
     cssPath: "~/styles/index.css",

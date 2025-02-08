@@ -3,7 +3,7 @@
     <template #header>
       <div class="p-2">
         <NuxtImg
-          alt="Blog Header Image"
+          :alt="`تصویر مقاله ${title}`"
           :src="image"
           class="w-full object-cover rounded-lg"
         />

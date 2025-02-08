@@ -27,10 +27,11 @@
               <div class="flex flex-col items-center h-full justify-center">
                 <img
                   src="/public/discount-pic.svg"
+                  alt="discount picture"
                   width="200"
                   class="py-2 mt-auto"
                 />
-                <ViewAllBtn />
+                <ViewAllBtn class="text-white" />
               </div>
             </MyCarouselItem>
             <MyCarouselItem

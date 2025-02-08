@@ -68,14 +68,14 @@
                 <span> از </span>
                 <span class="flex-center gap-2">
                   {{ priceRange?.[0] }}
-                  <img src="/Tooman.svg" alt="tooman svg" width="22" />
+                  <Tooman />
                 </span>
               </div>
               <div class="flex justify-between">
                 <span> تا </span>
                 <span class="flex-center gap-2">
                   {{ priceRange?.[1] }}
-                  <img src="/Tooman.svg" alt="tooman svg" width="22" />
+                  <Tooman />
                 </span>
               </div>
             </div>

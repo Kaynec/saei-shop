@@ -32,6 +32,7 @@ const buttonClasses = computed(() => {
     ]"
     :disabled="!canScrollNext"
     @click="scrollNext"
+    aria-label="next button carousel"
   >
     <slot>
       <Icon

@@ -1,7 +1,7 @@
 <template>
   <section class="flex flex-col gap-4 items-center justify-center">
     <div class="p-4">
-      <h3 class="font-semibold text-2xl">
+      <p class="font-semibold text-2xl">
         <span>جدیدترین </span>
         <span class="text-orange-400 relative">
           <svg
@@ -22,14 +22,14 @@
 
           مقالات
         </span>
-      </h3>
+      </p>
     </div>
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
     >
       <BlogCard
         v-for="i in 4"
-        image="https://s8.uupload.ir/files/marika-vinkmann-gxdlbzikwmc-unsplash_1_49av.png"
+        image="https://storage.iran.liara.space/cheatsgame-storage/product_images/wd-_ssd-1tr-back.png"
         title="لوازم التحریر چیست؟"
         content="لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، "
         :date="new Date().toLocaleDateString('fa')"

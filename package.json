@@ -6,6 +6,7 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
+    "start": "node .output/server/index.mjs",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "codegen": "orval --config ./orval.config.ts && node orval-post-code-gen.js"
@@ -26,6 +27,7 @@
     "date-fns-jalali": "^4.1.0-0",
     "embla-carousel-autoplay": "^8.5.2",
     "embla-carousel-vue": "^8.5.2",
+    "h3-compression": "^0.3.2",
     "markdown-it": "^14.1.0",
     "nuxt": "^3.15.1",
     "orval": "^7.5.0",

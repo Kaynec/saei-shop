@@ -31,6 +31,7 @@ const buttonClasses = computed(() => {
       'transition-all duration-300 w-8 h-8 flex items-center justify-center rounded-lg',
     ]"
     :disabled="!canScrollPrev"
+    aria-label="prev button carousel"
     @click="scrollPrev"
   >
     <slot>

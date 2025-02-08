@@ -7,8 +7,8 @@
         <div
           class="w-12 h-12 bg-orange-300 grid place-content-center font-semibold text-white"
           style="
-            -webkit-mask-image: url('star.svg');
-            mask-image: url('star.svg');
+            -webkit-mask-image: url(&quot;star.svg&quot;);
+            mask-image: url(&quot;star.svg&quot;);
             mask-repeat: no-repeat;
             mask-position: center;
             mask-size: cover;
@@ -41,11 +41,11 @@
         <div class="flex justify-between text-xl pt-2">
           <div class="flex gap-2 items-center text-gray-500">
             <span class="line-through">{{ off_price }} </span>
-            <img src="~/assets/images/Tooman.svg" alt="" />
+            <Tooman />
           </div>
           <div class="flex gap-2 items-center text-gray-900">
             <span>{{ price }}</span>
-            <img src="~/assets/images/Tooman.svg" alt="" />
+            <Tooman />
           </div>
         </div>
 
@@ -82,18 +82,26 @@
         <div class="flex pb-3 pt-1 gap-1 mt-1">
           <MyButton
             color="bg-orange-400"
-            class="basis-3/5 gap-2 text-white"
+            class="basis-4/6 gap-2 text-white"
             unstyled
           >
             <Icon name="mdi:basket-outline" class="text-xl" />
             <span>افزودن به سبد</span>
           </MyButton>
-          <MyButton class="basis-1/5" color="bg-gray-200">
-            <Icon name="mdi:heart-outline" class="text-gray-600 text-lg" />
+          <MyButton
+            aria-label="add product to favourite"
+            class="basis-2/6"
+            color="bg-gray-200"
+          >
+            <Icon
+              :name="hearted ? 'mdi:heart' : 'mdi:heart-outline'"
+              :class="hearted ? 'text-[#ED5254] ' : 'text-gray-600'"
+              class="text-lg"
+            />
           </MyButton>
-          <MyButton class="basis-1/5" color="bg-gray-200">
+          <!-- <MyButton class="basis-1/5" color="bg-gray-200">
             <Icon name="mdi:basket-outline" class="text-gray-600 text-lg" />
-          </MyButton>
+          </MyButton> -->
         </div>
       </div>
     </template>
@@ -110,6 +118,7 @@ const props = defineProps<{
   discount_end_time?: string; // Optional prop for discount end time
   price: string;
   off_price: string;
+  hearted?: boolean;
 }>();
 
 const countdown = ref({

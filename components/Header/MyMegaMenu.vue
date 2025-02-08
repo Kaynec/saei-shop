@@ -1,7 +1,8 @@
 <template>
   <MegaMenu :model="items" style="border: none; padding: 0">
     <template #item="{ item }">
-      <a
+      <!-- TODO change this to links later -->
+      <p
         class="flex items-center cursor-pointer overflow-hidden relative"
         style="border-radius: 2rem"
         :class="!item.root ? 'px-4 py-2' : ''"
@@ -12,7 +13,7 @@
           class="text-2xl text-grey-400"
         />
         <span>{{ item.label }}</span>
-      </a>
+      </p>
     </template>
   </MegaMenu>
 </template>

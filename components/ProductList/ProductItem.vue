@@ -44,21 +44,25 @@
         <div class="flex pb-3 pt-1 gap-1 mt-auto">
           <MyButton
             :color="`bg-${themeColor}-400`"
-            class="basis-3/5 gap-2 text-white"
+            class="basis-4/6 gap-2 text-white"
           >
             <Icon name="mdi:basket-outline" class="text-xl" />
             <span>افزودن به سبد</span>
           </MyButton>
-          <MyButton class="basis-1/5" color="bg-gray-200">
+          <MyButton
+            aria-label="add product to favourite"
+            class="basis-2/6"
+            color="bg-gray-200"
+          >
             <Icon
               :name="hearted ? 'mdi:heart' : 'mdi:heart-outline'"
               :class="hearted ? 'text-[#ED5254] ' : 'text-gray-600'"
               class="text-lg"
             />
           </MyButton>
-          <MyButton class="basis-1/5" color="bg-gray-200">
+          <!-- <MyButton class="basis-1/5" color="bg-gray-200">
             <Icon name="mdi:basket-outline" class="text-gray-600 text-lg" />
-          </MyButton>
+          </MyButton> -->
         </div>
       </div>
     </div>

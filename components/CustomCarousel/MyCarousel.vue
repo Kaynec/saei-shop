@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useAutoplay } from "./UseAutoPlay";
 import type {
   CarouselEmits,
   CarouselProps,
@@ -9,7 +8,6 @@ import { useProvideCarousel } from "./useCarousel";
 
 const props = withDefaults(defineProps<CarouselProps & WithClassAsProps>(), {
   orientation: "horizontal",
-  autoplay: false,
 });
 
 const emits = defineEmits<CarouselEmits>();
@@ -23,13 +21,6 @@ const {
   scrollNext,
   scrollPrev,
 } = useProvideCarousel(props, emits);
-
-onMounted(() => {
-  if (!props.autoplay) return;
-  setTimeout(() => {
-    useAutoplay(carouselApi.value!).toggleAutoplay();
-  }, 1000);
-});
 
 defineExpose({
   canScrollNext,

@@ -28,7 +28,7 @@
         <span> قیمت محصول : </span>
         <div class="flex-center gap-1">
           <span>{{ props.price.toLocaleString() }}</span>
-          <img src="/Tooman.svg" alt="tooman svg" width="22" />
+          <Tooman />
         </div>
       </div>
 
@@ -41,7 +41,7 @@
         <span> قیمت نهایی محصولات : </span>
         <div class="flex-center gap-1">
           <span>{{ (props.price * props.quantity).toLocaleString() }}</span>
-          <img src="/Tooman.svg" alt="tooman svg" width="22" />
+          <Tooman />
         </div>
       </div>
     </div>

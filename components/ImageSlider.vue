@@ -9,7 +9,7 @@ const carouselItems = Array.from(
   <main>
     <section class="flex flex-col sm:flex-row">
       <div class="w-full mx-auto">
-        <div class="max-w-[calc(100%)] mx-auto">
+        <h1 class="max-w-[calc(100%)] mx-auto">
           <MyCarousel
             :opts="{
               align: 'start',
@@ -25,6 +25,7 @@ const carouselItems = Array.from(
               >
                 <NuxtImg
                   :src="src"
+                  alt="فروشگاه ساعی"
                   width="1200"
                   class="w-full min-h-[60vh] max-h-[36rem] aspect-[16/9] object-cover"
                 />
@@ -33,7 +34,7 @@ const carouselItems = Array.from(
 
             <MyCarouselDots />
           </MyCarousel>
-        </div>
+        </h1>
       </div>
     </section>
   </main>

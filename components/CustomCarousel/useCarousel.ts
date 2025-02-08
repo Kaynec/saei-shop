@@ -26,21 +26,23 @@ const [useProvideCarousel, useInjectCarousel] = createInjectionState(
     let autoplayTimer: ReturnType<typeof setInterval> | null = null;
 
     function scrollPrev() {
-      emblaApi.value?.scrollPrev();
+      emblaApi.value?.scrollNext();
     }
 
     function scrollNext() {
-      emblaApi.value?.scrollNext();
+      emblaApi.value?.scrollPrev();
     }
 
     const canScrollNext = ref(false);
     const canScrollPrev = ref(false);
 
     function onSelect(api: CarouselApi) {
-      canScrollNext.value = api?.canScrollNext() || false;
-      canScrollPrev.value = api?.canScrollPrev() || false;
-      stopAutoplay();
-      startAutoplay();
+      canScrollNext.value = api?.canScrollPrev() || false;
+      canScrollPrev.value = api?.canScrollNext() || false;
+      if (autoplay) {
+        stopAutoplay();
+        startAutoplay();
+      }
     }
 
     function startAutoplay() {
@@ -69,6 +71,7 @@ const [useProvideCarousel, useInjectCarousel] = createInjectionState(
       emits("init-api", emblaApi.value);
 
       // Start autoplay if the prop is true
+      console.log(autoplay);
       if (autoplay) {
         startAutoplay();
       }

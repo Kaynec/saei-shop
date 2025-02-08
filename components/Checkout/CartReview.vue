@@ -41,7 +41,7 @@
               <div class="flex justify-between basis-full">
                 <span class="flex gap-2">
                   قیمت محصول: {{ product.price }}
-                  <img src="/Tooman.svg" alt="/Tooman.svg" />
+                  <Tooman />
                 </span>
 
                 <span class="flex gap-2">
@@ -50,7 +50,7 @@
 
                 <span class="flex gap-2">
                   قیمت کل: {{ product.price * product.quantity }}
-                  <img src="/Tooman.svg" alt="/Tooman.svg" />
+                  <Tooman />
                 </span>
               </div>
             </div>

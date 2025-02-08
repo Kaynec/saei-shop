@@ -59,13 +59,27 @@
 </template>
 
 <script setup lang="ts">
-import Address from "~/components/Dashboard/Address.vue";
-import Cards from "~/components/Dashboard/Cards.vue";
-import Discount from "~/components/Dashboard/Discount.vue";
-import Favourite from "~/components/Dashboard/Favourite.vue";
-import Orders from "~/components/Dashboard/Orders.vue";
-import ProfileDetail from "~/components/Dashboard/ProfileDetail.vue";
-import Ticket from "~/components/Dashboard/Ticket/Ticket.vue";
+const Address = defineAsyncComponent(
+  () => import("~/components/Dashboard/Address.vue")
+);
+const Cards = defineAsyncComponent(
+  () => import("~/components/Dashboard/Cards.vue")
+);
+const Discount = defineAsyncComponent(
+  () => import("~/components/Dashboard/Discount.vue")
+);
+const Favourite = defineAsyncComponent(
+  () => import("~/components/Dashboard/Favourite.vue")
+);
+const Orders = defineAsyncComponent(
+  () => import("~/components/Dashboard/Orders.vue")
+);
+const ProfileDetail = defineAsyncComponent(
+  () => import("~/components/Dashboard/ProfileDetail.vue")
+);
+const Ticket = defineAsyncComponent(
+  () => import("~/components/Dashboard/Ticket/Ticket.vue")
+);
 import { useAuthStore } from "~/store/auth";
 import { getUserName, getUserPhoto } from "~/util";
 
